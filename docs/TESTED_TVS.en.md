@@ -17,6 +17,7 @@ Recorded on October 30, 2026.
 | Backgrounds (3.4) | All 7 themes opened; four time variants, Automatic and Off/On checked on the TV. Theme/enabled state survived an APK update |
 | 4K files (3.4) | All 28 bundled JPEG files verified at 3840×2160. They are upscaled approved illustrations. This Xiaomi’s UI remains 1920×1080 because firmware config_maxUiWidth is 1920 |
 | New settings languages (3.4) | English Background settings and Home checked, then Russian restored; After the Bell, On, Automatic selected |
+| TV/Home movement (3.5) | Both utility tiles moved on the Xiaomi; menus offer no removal, saved order survived a launcher restart, and the previous layout was restored |
 | New Home and Home tile | Open the new launcher; returning from the TV source was checked |
 | Original Home flicker | The user confirmed that flicker disappeared after the original launcher was reversibly disabled |
 | Held volume and Home from screensaver | Confirmed by the user in the previous main 3.1 build; key interception remains disabled |
@@ -32,9 +33,37 @@ Recorded on October 30, 2026.
 
 This firmware did not handle the standard Bluetooth action, so its native accessories SliceActivity was used. System menu navigation required a separate bounded helper. Other firmware may behave differently.
 
+## KIVI 4K Android TV — portable 3.5
+
+- Android reports KIVI 4K Android TV, device bangbae, Android 11 / API 30, build RTO8.260427.001. A separate commercial panel SKU was not determined.
+- The actual portable 3.5-portable5 / code 17 APK was installed with data preserved. Android reports a 1920×1080 UI and density 320. All 28 bundled wallpaper files are 3840×2160.
+
+| Check | Actual result |
+| --- | --- |
+| New Home | Firmware ignored a simple default assignment. After separately approved, reversible stock Home disabling, the system Home opens our launcher directly |
+| Actual reboot | New Home appeared automatically; moved tiles, language/background selection and all 17 disabled packages persisted |
+| TV and Home (3.5) | Both tiles actually moved; their menus offer only dock and movement actions, without removal. Original layout restored after the test |
+| RU/EN | English Home and settings displayed on the TV; Russian restored through the interface |
+| Backgrounds | All 7 theme previews, 4 periods, Automatic and Off/On checked; Halloween displayed on Home. Selection survived the APK update and reboot |
+| Bluetooth/remote | Native Remotes & Accessories opened and showed KIVI RC60; pairings unchanged |
+| Network | Native Wi-Fi/network page opened; connection unchanged |
+| Inputs | HDMI 1/2/3/4 and composite input listed; actual HDMI video not assessed |
+| TV tile | Native com.mediatek.wwtv.tvcenter opened with cable channel UI; Home returned to the launcher. Video/audio quality not assessed |
+| Applications | YouTube, VK Video and Kinopoisk launched and returned via Home; actual streaming playback not assessed. Happ preserved, VPN not enabled |
+| Weather | Actual weather data and city displayed on Home; EN/RU display checked |
+| Physical KIVI remote | Owner confirmed direct Home without stock screen flicker and continuous volume changes while held |
+| KIVI background processes | No running processes found for 14 packages in the cleanup list. Anoki ACR remained resident as SYSTEM PERSISTENT after disable-user and force-stop; full termination was not confirmed |
+| Separate cleanup | 15 packages, including stock Home, disabled with owner consent; 2 were disabled beforehand. No application data erased; VK Video preserved |
+| Recovery | Public Restore-Kivi.ps1 Home scope actually restored stock Home, then new Home was reinstated. All scope checked only with WhatIf; wrong-model guard checked on Xiaomi |
+| Screensaver/services | Backdrop, sleep/screen timers and the original accessibility selection preserved. Key interception and System menu helper were not enabled on KIVI |
+
+Full-screen inspection of all 28 backgrounds, actual VPN/AirPlay operation and exact restart navigation on Android 11 were not tested. Held volume and flicker-free Home were confirmed by the KIVI owner; Home from its screensaver has not been checked yet.
+
+[Restore the original KIVI Home](RESTORE_KIVI.en.md).
+
 ## Not yet tested
 
-- The portable APK on a second TV or other Android TV / Google TV models.
+- Android TV / Google TV models other than the Xiaomi and KIVI listed above.
 - All native settings routes on Android 8–13 and different firmware.
 - HDMI video, all TV channels and playback in different third-party players.
 - Practical VPN and iPhone AirPlay operation as part of this release.

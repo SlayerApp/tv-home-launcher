@@ -1421,8 +1421,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (tileMenuEnabled && !reordering && openPopup == null && cardPrompt == null
                 && event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
             int position = focusedTilePosition();
-            if (position >= 0 && position < adapter.appCount()
-                    && !getPackageName().equals(adapter.packageAt(position))) {
+            if (position >= 0 && position < adapter.movableCount()) {
                 if (event.getAction() == KeyEvent.ACTION_UP && !event.isCanceled()) {
                     onTileLongPress(position, getCurrentFocus());
                 }
@@ -3621,10 +3620,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     public void onTileLongPress(int position, View card) {
         if (reordering) return;
         String key = adapter.keyAt(position);
-        if (key != null && key.endsWith("TVSourceTile")) return;
         String pkg = adapter.packageAt(position);
-        // Empty dock slots and the Default-home tile carry the launcher's own package: no menu for them.
-        if (key == null || pkg == null || pkg.equals(getPackageName())) return;
+        boolean utility = new ComponentName(this, MainActivity.class).flattenToShortString().equals(key)
+                || new ComponentName(this, "com.gathin.tvhome.TVSourceTile").flattenToShortString().equals(key)
+                || "com.codex.tvoldmenu".equals(pkg);
+        // Home and TV may move like apps; empty slots and the Default-home settings tile have no menu.
+        if (key == null || pkg == null || (pkg.equals(getPackageName()) && !utility)) return;
         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (200 * density));
@@ -3641,12 +3642,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             pickUp(at);
             Toast.makeText(this, R.string.reorder_hint, Toast.LENGTH_LONG).show();
         });
-        if (appLibraryEnabled) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
+        if (appLibraryEnabled && !utility) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
             if (LibraryApps.save(this, pkg, false)) reloadApps(false);
             else Toast.makeText(this, R.string.library_save_failed, Toast.LENGTH_LONG).show();
         });
         // Some firmware has no App info page at all; a row that only toasts "can't open" helps nobody.
-        Intent info = SystemSettings.appInfo(this, pkg);
+        Intent info = utility ? null : SystemSettings.appInfo(this, pkg);
         if (info != null) addSettingsMenuRow(rows, popup, R.string.library_app_info, () -> open(info));
         panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         popup.setWidth(Math.max((int) (200 * density), panel.getMeasuredWidth()));

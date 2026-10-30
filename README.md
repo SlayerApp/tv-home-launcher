@@ -1,100 +1,119 @@
 # TV Home Launcher
 
-[Русский](README.md) | [English](README.en.md)
+[English](README.md) | [Русский](README.ru.md)
 
-Лёгкий главный экран для Android TV / Google TV с оформлением в стиле Apple TV.
+A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Переносная сборка: 3.4-portable4.** Требуется Android 8.0 или новее. Это приложение-лаунчер, а не прошивка Android или tvOS.
+**Portable build: 3.5-portable5.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
 
-## Скачать и установить
+## Download and install
 
-- [Установочный APK](downloads/TV-Home-Apple-Style.apk?raw=1)
-- [Инструкция](docs/INSTALL.ru.txt)
-- [Контрольная сумма SHA-256](downloads/SHA256.txt)
+- [Download the APK](downloads/TV-Home-Apple-Style.apk?raw=1)
+- [Installation guide](docs/INSTALL.en.md)
+- [SHA-256 checksum](downloads/SHA256.txt)
 
-Скопируйте APK на флешку, откройте файловым менеджером на телевизоре и установите. Затем назначьте «Главный экран» приложением Home по умолчанию, если прошивка позволяет. На некоторых моделях для назначения Home нужна отдельная настройка под конкретный телевизор.
+Copy the APK to a USB drive, open it with a file manager on the TV, and install it. Then select “Главный экран” (Home) as the default Home app if the firmware supports this. Some models require a separate, model-specific setup to change the default launcher.
 
-Приложения, аккаунты, VPN-подписки и AirPlay-приёмник в APK не входят. Лаунчер не отключает системные приложения автоматически.
+Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bundled. The launcher does not automatically disable system apps.
 
-## Возможности
+## Features
 
-- Четыре крупные плитки первого ряда: kino.watch, YouTube, Кинопоиск и START; ниже остальные установленные TV-приложения.
-- Русский и английский языки: **Настройки → Язык → Русский / English**. Выбор сохраняется после обновления приложения; язык системных меню ТВ не меняется.
-- Автоматическое появление новых TV-приложений и настройка видимости плиток.
-- Источники сигнала, VPN и сеть в общем верхнем овале; отдельная кнопка настроек.
-- Плитка ТВ для встроенного тюнера и свои названия физических HDMI-входов.
-- Светлое меню настроек; переходы в штатные настройки Bluetooth, сети, изображения и звука.
-- Семь встроенных тем фона с переключателем Вкл./Выкл. и четырьмя временами суток; все 28 изображений — 3840×2160. [Темы и разрешение интерфейса](docs/BACKGROUNDS.md).
-- Бесплатная погода с приблизительным определением города и подгонкой длинного названия под карточку.
-- Кнопка перезагрузки с переходом в штатное меню. Перезапуск подтверждает пользователь.
+- Four large first-row tiles: kino.watch, YouTube, Kinopoisk and START; other installed TV apps appear below.
+- English and Russian: **Settings → Language → Русский / English**. The choice survives app updates; the TV’s native settings keep their system language.
+- Automatic discovery of newly installed TV apps and control over tile visibility.
+- Inputs, VPN and network controls in a shared top capsule, with a separate settings button.
+- A TV tile for the built-in tuner and custom labels for physical HDMI ports.
+- A light settings menu with links to native Bluetooth, network, picture and sound settings.
+- Seven bundled background themes, an On/Off switch and four times of day; all 28 images are 3840×2160. [Themes and UI resolution](docs/BACKGROUNDS.en.md).
+- Weather with approximate city detection and automatic text sizing for longer city names.
+- A restart shortcut that navigates to the native settings menu. The user confirms the actual restart.
 
-VPN-кнопка открывает отдельно установленный Happ. Встроенная заставка телевизора и её таймеры автоматически не меняются.
+The VPN button opens Happ, which must be installed separately. The TV’s original screensaver and its timers are not changed automatically.
 
-## Скриншоты
+## Screenshots
 
-Реальные снимки основной сборки 3.4 на Xiaomi MiTV-MOEU1. У переносной сборки тот же интерфейс со встроенной темой.
+Actual captures from the main 3.4 build on a Xiaomi MiTV-MOEU1. The portable build uses the same interface with an embedded theme. English is shown below; Russian captures are in the Russian README.
 
-**Главный экран**
+**Home screen**
 
-![Главный экран с четырьмя плитками и погодой](docs/screenshots/home.png)
+![Home screen with four tiles and weather](docs/screenshots/home-en.png)
 
-**Настройки**
+**Settings**
 
-![Меню настроек лаунчера](docs/screenshots/settings.png)
+![Launcher settings menu](docs/screenshots/settings-en.png)
 
-**Источники сигнала**
+**Language selection**
 
-![Выбор HDMI и телевизионного источника](docs/screenshots/inputs.png)
+![English and Russian language picker](docs/screenshots/language.png)
 
-## Темы фона
+**Inputs**
 
-[Галерея и управление фонами](docs/BACKGROUNDS.md): лес и озеро, горы, морской берег, райский пляж, Новый год, лесной Хэллоуин и «После звонка» с Джонни рядом с Марией. Функция включена в APK 3.4; выберите **Настройки → Фон**.
+![HDMI and TV input chooser](docs/screenshots/inputs.png)
 
-Включение, тема и время суток сохраняются. Автоматический режим следует часам ТВ; Выкл. возвращает прежнее оформление. Все 28 файлов имеют размер 3840×2160 — это увеличенные согласованные иллюстрации. На проверенном Xiaomi прошивка ограничивает сам интерфейс до 1920×1080.
+## Background themes
 
-**Райский пляж — снимок с ТВ**
+[Gallery and background controls](docs/BACKGROUNDS.en.md): forest/lake, mountains, coast, paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. Implemented in APK 3.4; open **Settings → Background**.
 
-![Обои с райским пляжем на телевизоре](docs/screenshots/home-beach.png)
+Enabled state, theme and time mode are saved. Automatic follows the TV clock; Off restores the previous appearance. All 28 files are 3840×2160 upscaled approved illustrations. The tested Xiaomi firmware limits the actual UI to 1920×1080.
 
-**Ночная тема «После звонка» — Джонни рядом с Марией**
+**Paradise beach — actual TV capture**
 
-![Ночные обои с четырьмя друзьями и Джонни](docs/screenshots/home-night.png)
+![Paradise beach wallpaper on the TV](docs/screenshots/home-beach.png)
 
-**Выбор обоев и времени суток**
+**After the Bell at night — Johnny beside Maria**
 
-![Меню выбора обоев на ТВ](docs/screenshots/backgrounds.png)
+![Night wallpaper with the four friends and Johnny](docs/screenshots/home-night.png)
 
-## На каких телевизорах проверено
+**Wallpaper and time-of-day controls**
 
-| Модель | Система | Статус |
+![Background selection on the TV](docs/screenshots/backgrounds-en.png)
+
+## Tested TVs
+
+| Model | System | Status |
 | --- | --- | --- |
-| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Основные функции проверены в 3.2; переключение RU/EN и сохранение выбора и фоны — в 3.4 |
-| Другие Android TV / Google TV | Заявленный минимум Android 8 / API 26 | Реальная установка и работа пока не проверены |
+| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Core functions checked in main 3.2; RU/EN switching and persistence and backgrounds checked in 3.4; TV/Home movement checked in 3.5 |
+| KIVI 4K Android TV (bangbae) | Android 11 / API 30 | Portable 3.5: installation, Home after reboot, RU/EN, backgrounds, TV/Home movement, Bluetooth and inputs |
+| Other Android TV / Google TV models | Declared minimum: Android 8 / API 26 | Installation and operation have not been tested on real devices yet |
 
-**Различие сборок:** основные проверки на Xiaomi проводились основной сборкой 3.2, а переключение языка и сохранение выбора, фоны и их отключение — сборкой 3.4. Переносной APK 3.4-portable4 из этого репозитория собран отдельно, со встроенной темой и домиком. Его установка на втором телевизоре ещё не проверена. Минимальная версия Android в манифесте не означает, что испытаны все модели.
+**Build distinction:** Xiaomi uses the main build, including TV/Home movement checks in 3.5. KIVI was installed and tested with this repository’s portable 3.5-portable5 APK. Testing these two devices does not establish compatibility with every Android TV model.
 
-Список реальных проверок и ограничений: [TESTED_TVS.md](docs/TESTED_TVS.md).
+See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
-## Погода и разрешения
+## Weather and permissions
 
-Погода включается только после согласия в интерфейсе. IPWhois получает внешний IP для приблизительного города; Open-Meteo и резервный wttr.in получают приблизительное местоположение и видят сетевые метаданные запроса. GPS не используется. При VPN определённый город может отличаться. Погоду можно отключить.
+Weather requests start only after consent in the interface. IPWhois receives the public IP address to estimate the city. Open-Meteo and the fallback provider wttr.in receive an approximate location and can see request network metadata. GPS is not used. A VPN may change the detected city. Weather can be disabled.
 
-Для автоматического перехода к системной перезагрузке отдельно разрешается «Помощник системного меню» в специальных возможностях Android. Android предоставляет ему доступ к содержимому экрана и управлению меню. Реализация действует только после нажатия кнопки, только в штатных настройках, до 20 секунд; она не перехватывает клавиши и не нажимает подтверждение перезагрузки. Точная навигация командами пульта предусмотрена для Android 13+. Размещение и названия системных пунктов зависят от прошивки.
+Automatic navigation to the restart menu requires separately enabling “System menu helper” (“Помощник системного меню” in Russian) in Android Accessibility settings. Android grants this service access to screen content and menu control. The implementation acts only after the restart shortcut is pressed, only inside native settings, and for up to 20 seconds. It does not intercept remote keys or press the restart confirmation. Remote navigation commands are supported on Android 13+. Native menu labels and layout depend on the firmware.
 
-Наличие AirPlay, качество VPN и работа сторонних плееров этим лаунчером не обеспечиваются: это отдельные функции телевизора и установленных приложений.
+AirPlay availability, VPN connectivity and playback in third-party players are separate TV or app functions, not provided by the launcher itself.
 
-## Исходники и сборка
+## Source and building
 
-В `app/src` находятся исходники переносной сборки и JVM-тесты. Для сборки нужны JDK 17 и Android SDK 34. Команды и особенности подписи: [BUILD.md](docs/BUILD.md).
+`app/src` contains the portable build’s source and JVM tests. Building requires JDK 17 and Android SDK 34. Commands and signing details: [BUILD.en.md](docs/BUILD.en.md).
 
-Проверка текущей сборки: 315 JVM-тестов пройдены, Android lint — 0 ошибок и 101 предупреждение, release APK собран. Это автоматические проверки кода, а не испытания на дополнительных телевизорах.
+Current build validation: 315 JVM tests passed, Android lint reported 0 errors and 101 warnings, and the release APK was built successfully. These are automated code checks, not testing on additional TV models.
 
-## Основа и лицензии
+## Upstream and licenses
 
-Адаптация [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv), исходная база `095b71ad93d99ea28d94d97b06385709d354b795`.
+Adapted from [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv), base commit `095b71ad93d99ea28d94d97b06385709d354b795`.
 
-- [MIT License и исходное уведомление](LICENSE)
-- [Лицензия шрифта Outfit](FONT-LICENSE-OFL.txt)
-- [Уведомления об исходном проекте](NOTICE.md)
+- [MIT license and original notice](LICENSE)
+- [Outfit font license](FONT-LICENSE-OFL.txt)
+- [Upstream notices](NOTICE.md)
 
-Проект не связан с Apple, Xiaomi или разработчиками показываемых сторонних приложений.
+This project is not affiliated with Apple, Xiaomi or the developers of the third-party apps shown in the interface.
+
+## KIVI: actual device captures
+
+The portable build on a KIVI 4K Android TV running Android 11. These UI captures are 1920×1080; wallpaper files are 3840×2160.
+
+![KIVI Home in English](docs/screenshots/kivi-home-en.png)
+
+![KIVI settings in English](docs/screenshots/kivi-settings-en.png)
+
+## Arrange tiles and restore the original Home
+
+Hold OK on a tile or press Menu, choose Move, use the arrows, press OK to place it, and Back to save. TV and Home can move alongside applications and remain available in the launcher; their menus do not offer removal.
+
+For the tested KIVI, use the [recovery script](tools/Restore-Kivi.ps1) and [recovery guide](docs/RESTORE_KIVI.en.md). Restore only the original Home or all 15 packages from the separate cleanup profile while preserving their data. The APK itself does not disable packages.

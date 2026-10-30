@@ -1,10 +1,10 @@
 # TV Home Launcher
 
-[English](README.en.md) | [Русский](README.md)
+[English](README.md) | [Русский](README.ru.md)
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build: 3.4-portable4.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
+**Portable build: 3.5-portable5.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
@@ -72,10 +72,11 @@ Enabled state, theme and time mode are saved. Automatic follows the TV clock; Of
 
 | Model | System | Status |
 | --- | --- | --- |
-| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Core functions checked in main 3.2; RU/EN switching and persistence and backgrounds checked in 3.4 |
+| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Core functions checked in main 3.2; RU/EN switching and persistence and backgrounds checked in 3.4; TV/Home movement checked in 3.5 |
+| KIVI 4K Android TV (bangbae) | Android 11 / API 30 | Portable 3.5: installation, Home after reboot, RU/EN, backgrounds, TV/Home movement, Bluetooth and inputs |
 | Other Android TV / Google TV models | Declared minimum: Android 8 / API 26 | Installation and operation have not been tested on real devices yet |
 
-**Build distinction:** core device checks used main 3.2, and language switching and persistence and backgrounds were checked in main 3.4. The portable 3.4-portable4 APK in this repository is built separately and includes its theme and Home tile. Installation on a second TV has not been tested yet. The minimum Android version in the manifest does not mean that every model has been tested.
+**Build distinction:** Xiaomi uses the main build, including TV/Home movement checks in 3.5. KIVI was installed and tested with this repository’s portable 3.5-portable5 APK. Testing these two devices does not establish compatibility with every Android TV model.
 
 See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
@@ -102,3 +103,17 @@ Adapted from [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv), ba
 - [Upstream notices](NOTICE.md)
 
 This project is not affiliated with Apple, Xiaomi or the developers of the third-party apps shown in the interface.
+
+## KIVI: actual device captures
+
+The portable build on a KIVI 4K Android TV running Android 11. These UI captures are 1920×1080; wallpaper files are 3840×2160.
+
+![KIVI Home in English](docs/screenshots/kivi-home-en.png)
+
+![KIVI settings in English](docs/screenshots/kivi-settings-en.png)
+
+## Arrange tiles and restore the original Home
+
+Hold OK on a tile or press Menu, choose Move, use the arrows, press OK to place it, and Back to save. TV and Home can move alongside applications and remain available in the launcher; their menus do not offer removal.
+
+For the tested KIVI, use the [recovery script](tools/Restore-Kivi.ps1) and [recovery guide](docs/RESTORE_KIVI.en.md). Restore only the original Home or all 15 packages from the separate cleanup profile while preserving their data. The APK itself does not disable packages.

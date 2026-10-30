@@ -29,7 +29,8 @@ public final class AppleAppsActivity extends AppleUi {
         for (ResolveInfo app : apps) {
             if (app.activityInfo == null || !app.activityInfo.exported) continue;
             String pkg = app.activityInfo.packageName;
-            if (pkg.equals(getPackageName()) || !seen.add(pkg) || pkg.toLowerCase(java.util.Locale.ROOT).contains("factory")) continue;
+            if (pkg.equals(getPackageName()) || pkg.equals("com.codex.tvoldmenu") || !seen.add(pkg)
+                    || pkg.toLowerCase(java.util.Locale.ROOT).contains("factory")) continue;
             String label = Cards.cleanLabel(String.valueOf(app.loadLabel(getPackageManager())), pkg);
             boolean[] shown = {LibraryApps.visible(true, hidden.contains(pkg), added.contains(pkg), removed.contains(pkg))};
             LinearLayout[] holder = new LinearLayout[1];
