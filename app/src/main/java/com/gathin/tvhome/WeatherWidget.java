@@ -208,13 +208,13 @@ final class WeatherWidget {
         }
         long saved = prefs.getLong("saved", 0);
         if (!WeatherConditions.fresh(saved, System.currentTimeMillis(), MAX_AGE)) {
-            view.setText(saved == 0 && !attempted ? "Погода\nОпределяем город…" : "Погода\nНет свежих данных");
+            view.setText(saved == 0 && !attempted ? activity.getString(R.string.apple_weather_loading) : activity.getString(R.string.apple_weather_unavailable));
             view.setCompoundDrawables(null, null, null, null);
         } else {
             int temp = Math.round(prefs.getFloat("temperature", 0));
             int code = prefs.getInt("code", -1);
             String degree = (temp > 0 ? "+" : "") + temp + "°";
-            String main = degree + "  ·  " + WeatherConditions.label(code);
+            String main = degree + "  ·  " + activity.getString(WeatherConditions.labelResource(code));
             android.text.SpannableString text = new android.text.SpannableString(main + "\n" + prefs.getString("city", ""));
             text.setSpan(new android.text.style.RelativeSizeSpan(1.3f), 0, degree.length(), 0);
             text.setSpan(new android.text.style.ForegroundColorSpan(0xaaffffff), main.length() + 1, text.length(), 0);
@@ -275,21 +275,20 @@ final class WeatherWidget {
         SharedPreferences p = a.getSharedPreferences(PREFS, Activity.MODE_PRIVATE);
         if (!p.getBoolean("consent", false)) { consent(a, p, () -> { }); return; }
         if (!p.getBoolean("fallback_consent", false)) {
-            new AlertDialog.Builder(a).setTitle("Резервная погода")
-                    .setMessage("Разрешить wttr.in при недоступности Open-Meteo? Сервис получит приблизительные координаты города и внешний IP телевизора.")
-                    .setPositiveButton("Разрешить wttr.in", (d, w) -> p.edit().putBoolean("fallback_consent", true)
+            new AlertDialog.Builder(a).setTitle(R.string.apple_weather_backup_title)
+                    .setMessage(R.string.apple_weather_backup_message)
+                    .setPositiveButton(R.string.apple_weather_backup_allow, (d, w) -> p.edit().putBoolean("fallback_consent", true)
                             .putBoolean("enabled", true).remove("saved").apply())
-                    .setNegativeButton("Не сейчас", null).show();
+                    .setNegativeButton(R.string.apple_not_now, null).show();
             return;
         }
-        String city = p.getString("city", "Город ещё не определён");
-        AlertDialog dialog = new AlertDialog.Builder(a).setTitle("Погода")
-                .setMessage(city + "\n\nГород определяется приблизительно по интернет-подключению. VPN может изменить город.\n\nИсточник: "
-                        + p.getString("provider", "ещё нет данных") + "\nДанные: open-meteo.com · wttr.in\nГеолокация: ipwhois.io")
-                .setPositiveButton("Обновить город", (d, w) -> p.edit().remove("located").remove("saved").apply())
-                .setNeutralButton(p.getBoolean("enabled", true) ? "Скрыть погоду" : "Показать погоду",
+        String city = p.getString("city", a.getString(R.string.apple_city_unknown));
+        AlertDialog dialog = new AlertDialog.Builder(a).setTitle(R.string.apple_weather)
+                .setMessage(a.getString(R.string.apple_weather_info, city, p.getString("provider", a.getString(R.string.apple_no_data))))
+                .setPositiveButton(R.string.apple_refresh_city, (d, w) -> p.edit().remove("located").remove("saved").apply())
+                .setNeutralButton(p.getBoolean("enabled", true) ? R.string.apple_hide_weather : R.string.apple_show_weather,
                         (d, w) -> p.edit().putBoolean("enabled", !p.getBoolean("enabled", true)).apply())
-                .setNegativeButton("Закрыть", null).create();
+                .setNegativeButton(R.string.apple_close, null).create();
         dialog.show();
         TextView message = dialog.findViewById(android.R.id.message);
         if (message != null) android.text.util.Linkify.addLinks(message, android.text.util.Linkify.WEB_URLS);
@@ -297,14 +296,14 @@ final class WeatherWidget {
     }
 
     private static AlertDialog consent(Activity a, SharedPreferences p, Runnable changed) {
-        AlertDialog dialog = new AlertDialog.Builder(a).setTitle("Погода на главном экране")
-                .setMessage("Разрешить автоматическую погоду?\n\nIPWhois получит внешний IP для города. Open-Meteo и резервный wttr.in получат приблизительные координаты города и увидят внешний IP.\n\nТочная геопозиция и GPS не используются. VPN может изменить город.")
-                .setPositiveButton("Разрешить", (d, w) -> {
+        AlertDialog dialog = new AlertDialog.Builder(a).setTitle(R.string.apple_weather_consent_title)
+                .setMessage(R.string.apple_weather_consent_message)
+                .setPositiveButton(R.string.apple_allow, (d, w) -> {
                     p.edit().putBoolean("asked", true).putBoolean("consent", true).putBoolean("fallback_consent", true)
                             .putBoolean("enabled", true).apply();
                     changed.run();
                 })
-                .setNegativeButton("Не сейчас", (d, w) ->
+                .setNegativeButton(R.string.apple_not_now, (d, w) ->
                         p.edit().putBoolean("asked", true).putBoolean("enabled", false).apply())
                 .setOnCancelListener(d -> p.edit().putBoolean("asked", true).apply()).create();
         dialog.show();

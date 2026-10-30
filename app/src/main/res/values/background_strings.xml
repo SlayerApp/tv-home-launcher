@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The custom illustrated backgrounds support RU/EN; other locales fall back to English. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="bg_title">Background</string>
+    <string name="bg_on">On</string>
+    <string name="bg_off">Off</string>
+    <string name="bg_time">Time of day</string>
+    <string name="bg_theme">Theme</string>
+    <string name="bg_lake">Forest and lake</string>
+    <string name="bg_mountains">Misty mountains</string>
+    <string name="bg_coast">Coast</string>
+    <string name="bg_beach">Paradise beach</string>
+    <string name="bg_new_year">New Year</string>
+    <string name="bg_halloween">Halloween forest</string>
+    <string name="bg_after_bell">After the Bell</string>
+    <string name="bg_morning">Morning</string>
+    <string name="bg_day">Day</string>
+    <string name="bg_evening">Evening</string>
+    <string name="bg_night">Night</string>
+    <string name="bg_schedule">Automatic follows the TV clock: morning 06–11, day 11–17, evening 17–22, night 22–06. Off restores the previous Home appearance. The TV screensaver is kept.</string>
+</resources>

@@ -140,6 +140,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private RecyclerView grid;
     private FrameLayout root;
     private WeatherWidget weather;
+    private SceneBackgroundView sceneBackground;
+    private boolean sceneBackgroundEnabled;
     private WallpaperPlayer wallpaperPlayer;
     private GlassView glass;
     private View ambient;
@@ -412,6 +414,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             if (festive) updateWifiLabel();
             sky.update();
             wallpaperPlayer.update();
+            if (sceneBackground != null) sceneBackground.update();
             handler.postDelayed(this, MINUTE_MS);
         }
     };
@@ -469,7 +472,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         getWindow().setBackgroundDrawable(null);
         wallpaperPlayer = new WallpaperPlayer(this, root, cfg);
         sky = findViewById(R.id.sky);
-        sky.setIntensity(cfg.skyIntensity);
+        sceneBackgroundEnabled = Backgrounds.enabled(this);
+        if (sceneBackgroundEnabled) {
+            sceneBackground = new SceneBackgroundView(this);
+            sceneBackgroundEnabled = sceneBackground.ready();
+            if (sceneBackgroundEnabled) root.addView(sceneBackground, root.indexOfChild(sky) + 1,
+                    new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        sky.setIntensity(sceneBackgroundEnabled ? 0 : cfg.skyIntensity);
         glass = findViewById(R.id.glass);
         glass.setStyle(cfg.glassStyle);
         if (festive) glass.setAccent(festival.accentColor());
@@ -477,7 +487,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // The glow is one bitmap, so its alpha can be applied while drawing it. Otherwise every frame of
         // a fade renders it into a full-screen offscreen buffer first.
         ambient.forceHasOverlappingRendering(false);
-        ambientGlow = cfg.ambientGlow;
+        ambientGlow = cfg.ambientGlow && !sceneBackgroundEnabled;
         appGlow = cfg.appGlow;
         if (!ambientGlow) ambient.setVisibility(View.GONE);
         heroName = findViewById(R.id.heroName);
@@ -492,8 +502,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         glowStyle = cfg.glowStyle;
         heroDotsShown = cfg.cinematicDots;
         cinematicWhiteFocus = cfg.cinematicWhiteFocus;
-        heroArtAlpha = cfg.cinematicArt / 100f;
-        if (cinematic) setUpCinematicShelf(cfg.cinematicScrim);
+        heroArtAlpha = sceneBackgroundEnabled ? 0f : cfg.cinematicArt / 100f;
+        if (cinematic) setUpCinematicShelf(sceneBackgroundEnabled ? Math.min(cfg.cinematicScrim, 30) : cfg.cinematicScrim);
         // dock_title false: the name above the dock (and the cinematic lines under it) never shows; the glow
         // still follows the dock.
         if (!cfg.dockTitle) hero.setVisibility(View.GONE);
@@ -840,7 +850,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btnSettings.setOnClickListener(v -> startActivity(new Intent(this, AppleSettingsActivity.class)));
         btnInputs.setVisibility(View.VISIBLE);
         makeIconOnly((TextView) btnInputs);
-        btnInputs.setContentDescription("Источники сигнала");
+        btnInputs.setContentDescription(getString(R.string.apple_input_sources));
         btnReorder.setVisibility(View.GONE);
         btnLibraryTop.setVisibility(View.GONE);
         showInputsPill = true;
@@ -859,7 +869,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             Intent vpn = getPackageManager().getLeanbackLaunchIntentForPackage("com.happproxy");
             if (vpn == null) vpn = getPackageManager().getLaunchIntentForPackage("com.happproxy");
             if (vpn != null) open(vpn);
-            else Toast.makeText(this, "Сначала установите Happ", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, R.string.apple_install_happ, Toast.LENGTH_SHORT).show();
         });
         ViewGroup compactBar = findViewById(R.id.topButtons);
         LinearLayout controlsCapsule = new LinearLayout(this);
@@ -1106,6 +1116,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
         if (openLiveTvAfterBoot()) return;
         if (weather != null) weather.resume();
+        if (sceneBackground != null) sceneBackground.update();
         updateGreeting();
         updatePanel();
         // The network and Inputs pills keep their state while Home is in the background, and callbacks update them
@@ -1341,6 +1352,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         heroArtCache.clear();
         heroArtKey = null;
         wallpaperPlayer.releaseForMemoryPressure();
+        if (sceneBackground != null) sceneBackground.release();
         tileRefresh.invalidate();
     }
 
@@ -1361,6 +1373,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (gameDay != null) gameDay.shutdown();
         unregisterReceiver(packageReceiver);
         wallpaperPlayer.close();
+        if (sceneBackground != null) sceneBackground.release();
         ConnectivityManager cm = getSystemService(ConnectivityManager.class);
         TvInputManager tim = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
         if (tim != null) tim.unregisterCallback(inputCallback);
@@ -3429,7 +3442,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return;
         }
         addSeparator(rows);
-        addInputRow(rows, popup, R.drawable.ic_settings, "Названия HDMI", -1,
+        addInputRow(rows, popup, R.drawable.ic_settings, getString(R.string.apple_hdmi_names), -1,
                 () -> startActivity(new Intent(this, AppleInputsActivity.class)));
 
         // Fit the widest row: TVs that report a status on every port (Sony) would otherwise squeeze the names out.

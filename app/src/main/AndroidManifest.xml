@@ -113,6 +113,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".AppleInputsActivity" android:exported="false"
             android:screenOrientation="landscape" />
+        <activity android:name=".AppleBackgroundsActivity" android:exported="false"
+            android:screenOrientation="landscape" />
         <service android:name=".SystemMenuService" android:exported="true"
             android:label="@string/system_menu_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">

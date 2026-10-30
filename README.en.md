@@ -4,7 +4,7 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build: 3.2-portable2.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The current custom settings interface is in Russian; documentation is available in English and Russian.
+**Portable build: 3.4-portable4.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
@@ -19,10 +19,12 @@ Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bund
 ## Features
 
 - Four large first-row tiles: kino.watch, YouTube, Kinopoisk and START; other installed TV apps appear below.
+- English and Russian: **Settings → Language → Русский / English**. The choice survives app updates; the TV’s native settings keep their system language.
 - Automatic discovery of newly installed TV apps and control over tile visibility.
 - Inputs, VPN and network controls in a shared top capsule, with a separate settings button.
 - A TV tile for the built-in tuner and custom labels for physical HDMI ports.
 - A light settings menu with links to native Bluetooth, network, picture and sound settings.
+- Seven bundled background themes, an On/Off switch and four times of day; all 28 images are 3840×2160. [Themes and UI resolution](docs/BACKGROUNDS.en.md).
 - Weather with approximate city detection and automatic text sizing for longer city names.
 - A restart shortcut that navigates to the native settings menu. The user confirms the actual restart.
 
@@ -30,28 +32,50 @@ The VPN button opens Happ, which must be installed separately. The TV’s origin
 
 ## Screenshots
 
-Captured from the main 3.2 build on a Xiaomi MiTV-MOEU1. The portable build uses the same interface with an embedded theme. The screenshots show the Russian interface.
+Actual captures from the main 3.4 build on a Xiaomi MiTV-MOEU1. The portable build uses the same interface with an embedded theme. English is shown below; Russian captures are in the Russian README.
 
 **Home screen**
 
-![Home screen with four tiles and weather](docs/screenshots/home.png)
+![Home screen with four tiles and weather](docs/screenshots/home-en.png)
 
 **Settings**
 
-![Launcher settings menu](docs/screenshots/settings.png)
+![Launcher settings menu](docs/screenshots/settings-en.png)
+
+**Language selection**
+
+![English and Russian language picker](docs/screenshots/language.png)
 
 **Inputs**
 
 ![HDMI and TV input chooser](docs/screenshots/inputs.png)
 
+## Background themes
+
+[Gallery and background controls](docs/BACKGROUNDS.en.md): forest/lake, mountains, coast, paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. Implemented in APK 3.4; open **Settings → Background**.
+
+Enabled state, theme and time mode are saved. Automatic follows the TV clock; Off restores the previous appearance. All 28 files are 3840×2160 upscaled approved illustrations. The tested Xiaomi firmware limits the actual UI to 1920×1080.
+
+**Paradise beach — actual TV capture**
+
+![Paradise beach wallpaper on the TV](docs/screenshots/home-beach.png)
+
+**After the Bell at night — Johnny beside Maria**
+
+![Night wallpaper with the four friends and Johnny](docs/screenshots/home-night.png)
+
+**Wallpaper and time-of-day controls**
+
+![Background selection on the TV](docs/screenshots/backgrounds-en.png)
+
 ## Tested TVs
 
 | Model | System | Status |
 | --- | --- | --- |
-| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Interface and core functions tested in the main 3.2 build; details below |
+| Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Core functions checked in main 3.2; RU/EN switching and persistence and backgrounds checked in 3.4 |
 | Other Android TV / Google TV models | Declared minimum: Android 8 / API 26 | Installation and operation have not been tested on real devices yet |
 
-**Build distinction:** device checks on the Xiaomi used the main 3.2 build. The portable 3.2-portable2 APK in this repository is built separately and includes its theme and Home tile. Installation on a second TV has not been tested yet. The minimum Android version in the manifest does not mean that every model has been tested.
+**Build distinction:** core device checks used main 3.2, and language switching and persistence and backgrounds were checked in main 3.4. The portable 3.4-portable4 APK in this repository is built separately and includes its theme and Home tile. Installation on a second TV has not been tested yet. The minimum Android version in the manifest does not mean that every model has been tested.
 
 See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
@@ -59,7 +83,7 @@ See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
 Weather requests start only after consent in the interface. IPWhois receives the public IP address to estimate the city. Open-Meteo and the fallback provider wttr.in receive an approximate location and can see request network metadata. GPS is not used. A VPN may change the detected city. Weather can be disabled.
 
-Automatic navigation to the restart menu requires separately enabling “Помощник системного меню” (System menu helper) in Android Accessibility settings. Android grants this service access to screen content and menu control. The implementation acts only after the restart shortcut is pressed, only inside native settings, and for up to 20 seconds. It does not intercept remote keys or press the restart confirmation. Remote navigation commands are supported on Android 13+. Native menu labels and layout depend on the firmware.
+Automatic navigation to the restart menu requires separately enabling “System menu helper” (“Помощник системного меню” in Russian) in Android Accessibility settings. Android grants this service access to screen content and menu control. The implementation acts only after the restart shortcut is pressed, only inside native settings, and for up to 20 seconds. It does not intercept remote keys or press the restart confirmation. Remote navigation commands are supported on Android 13+. Native menu labels and layout depend on the firmware.
 
 AirPlay availability, VPN connectivity and playback in third-party players are separate TV or app functions, not provided by the launcher itself.
 
@@ -67,7 +91,7 @@ AirPlay availability, VPN connectivity and playback in third-party players are s
 
 `app/src` contains the portable build’s source and JVM tests. Building requires JDK 17 and Android SDK 34. Commands and signing details: [BUILD.en.md](docs/BUILD.en.md).
 
-Current build validation: 307 JVM tests passed, Android lint reported 0 errors and 99 warnings, and the release APK was built successfully. These are automated code checks, not testing on additional TV models.
+Current build validation: 315 JVM tests passed, Android lint reported 0 errors and 101 warnings, and the release APK was built successfully. These are automated code checks, not testing on additional TV models.
 
 ## Upstream and licenses
 

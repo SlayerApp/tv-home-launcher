@@ -313,9 +313,9 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 fresh.add(new Entry(label, component, banner, icon));
             }
         }
-        fresh.add(new Entry("Главный экран", new ComponentName(ctx, MainActivity.class),
+        fresh.add(new Entry(ctx.getString(R.string.apple_home), new ComponentName(ctx, MainActivity.class),
                 AppleUi.homeTile(ctx), ctx.getDrawable(R.drawable.ic_old_home)));
-        fresh.add(new Entry(Entry.TV_SOURCE, "ТВ", new ComponentName(ctx, "com.gathin.tvhome.TVSourceTile"),
+        fresh.add(new Entry(Entry.TV_SOURCE, ctx.getString(R.string.apple_tv_source), new ComponentName(ctx, "com.gathin.tvhome.TVSourceTile"),
                 AppleUi.tvTile(ctx), ctx.getDrawable(R.drawable.ic_tv_source), null, 0));
         Collections.sort(fresh, (a, b) -> {
             // The owner's own order first; tiles it does not know (new installs) follow by the rule below.

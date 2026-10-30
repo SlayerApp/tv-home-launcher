@@ -7,6 +7,24 @@ import org.junit.Test;
 
 public class LauncherLocaleTest {
     @Test
+    public void savedEnglishWinsOverRussianTheme() {
+        assertEquals("en", LauncherLocale.resolve("en", "ru").getLanguage());
+    }
+
+    @Test
+    public void savedRussianWinsOverEnglishTheme() {
+        assertEquals("ru", LauncherLocale.resolve("ru", "en").getLanguage());
+    }
+
+    @Test
+    public void missingOrUnsupportedSavedChoiceKeepsThemeFallback() {
+        assertEquals("vi", LauncherLocale.resolve("", "vi").getLanguage());
+        assertEquals("ru", LauncherLocale.resolve("../en", "ru").getLanguage());
+        assertEquals("en", LauncherLocale.resolve("fr", "en").getLanguage());
+        assertNull(LauncherLocale.resolve(null, ""));
+    }
+
+    @Test
     public void plainTagsBecomeLocales() {
         assertEquals("vi", LauncherLocale.parse("vi").getLanguage());
         assertEquals("BR", LauncherLocale.parse("pt-BR").getCountry());

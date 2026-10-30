@@ -24,9 +24,9 @@ public final class AppleInputsActivity extends AppleUi {
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        screen("Источники сигнала");
+        screen(getString(R.string.apple_input_sources));
         previewIcon.setImageResource(R.drawable.ic_tv_source);
-        section("Названия HDMI");
+        section(getString(R.string.apple_hdmi_names));
         TvInputManager manager = getSystemService(TvInputManager.class);
         List<TvInputInfo> inputs = new ArrayList<>();
         try { if (manager != null) inputs.addAll(manager.getTvInputList()); }
@@ -42,11 +42,11 @@ public final class AppleInputsActivity extends AppleUi {
             if (!label.toUpperCase(java.util.Locale.ROOT).contains("HDMI")) label = "HDMI " + label;
             final String port = label, id = info.getId();
             String name = alias(this, id);
-            row(port, name.isEmpty() ? "Без названия  ›" : name + "  ›", () -> rename(id, port));
+            row(port, name.isEmpty() ? getString(R.string.apple_no_name) + "  ›" : name + "  ›", () -> rename(id, port));
             count++;
         }
-        if (count == 0) row("HDMI-входы не найдены", "", () -> { });
-        android.widget.TextView note = text("Выберите вход, чтобы задать название. Например, Apple TV или игровая приставка.", 13, 0xff687389);
+        if (count == 0) row(getString(R.string.apple_no_hdmi), "", () -> { });
+        android.widget.TextView note = text(getString(R.string.apple_hdmi_help), 13, 0xff687389);
         note.setPadding(dp(12), dp(16), dp(12), 0);
         rows.addView(note, new LinearLayout.LayoutParams(-1, -2));
     }
@@ -55,16 +55,16 @@ public final class AppleInputsActivity extends AppleUi {
         EditText input = new EditText(this);
         input.setSingleLine(true);
         input.setText(alias(this, id));
-        input.setHint("Название устройства");
+        input.setHint(getString(R.string.apple_device_name));
         input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
         input.setSelectAllOnFocus(true);
         LinearLayout content = new LinearLayout(this);
         content.setPadding(dp(24), dp(8), dp(24), 0);
         content.addView(input, new LinearLayout.LayoutParams(-1, -2));
         new AlertDialog.Builder(this).setTitle(port).setView(content)
-                .setPositiveButton("Сохранить", (d, w) -> save(id, input.getText().toString()))
-                .setNeutralButton("Убрать название", (d, w) -> save(id, ""))
-                .setNegativeButton("Отмена", null).show();
+                .setPositiveButton(getString(R.string.apple_save), (d, w) -> save(id, input.getText().toString()))
+                .setNeutralButton(getString(R.string.apple_remove_name), (d, w) -> save(id, ""))
+                .setNegativeButton(android.R.string.cancel, null).show();
     }
 
     private void save(String id, String raw) {
@@ -72,6 +72,6 @@ public final class AppleInputsActivity extends AppleUi {
         android.content.SharedPreferences.Editor edit = getSharedPreferences(PREFS, MODE_PRIVATE).edit();
         if (clean.isEmpty()) edit.remove(id); else edit.putString(id, clean);
         if (edit.commit()) { changed(); recreate(); }
-        else android.widget.Toast.makeText(this, "Не удалось сохранить название", android.widget.Toast.LENGTH_SHORT).show();
+        else android.widget.Toast.makeText(this, R.string.apple_save_name_error, android.widget.Toast.LENGTH_SHORT).show();
     }
 }

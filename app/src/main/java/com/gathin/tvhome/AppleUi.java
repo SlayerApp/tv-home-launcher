@@ -27,6 +27,15 @@ import android.widget.Toast;
 
 /** Local, remote-friendly TV settings. It never writes protected system settings. */
 abstract class AppleUi extends Activity {
+    @Override protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LauncherLocale.wrap(base));
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        if (!LauncherLocale.matches(this)) recreate();
+    }
+
     LinearLayout rows;
     ImageView previewIcon;
     TextView previewLabel;
@@ -101,7 +110,7 @@ abstract class AppleUi extends Activity {
     }
 
     void section(String title) {
-        TextView label = text(title.toUpperCase(java.util.Locale.forLanguageTag("ru")), 11, 0xff687389);
+        TextView label = text(title.toUpperCase(getResources().getConfiguration().getLocales().get(0)), 11, 0xff687389);
         label.setPadding(dp(12), dp(18), 0, dp(7));
         label.setLetterSpacing(0.08f);
         rows.addView(label);
@@ -146,13 +155,13 @@ abstract class AppleUi extends Activity {
         Intent i = getPackageManager().getLeanbackLaunchIntentForPackage(pkg);
         if (i == null) i = getPackageManager().getLaunchIntentForPackage(pkg);
         if (i != null) open(i);
-        else Toast.makeText(this, "Приложение не установлено", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, R.string.apple_app_missing, Toast.LENGTH_SHORT).show();
     }
 
     void open(Intent intent) {
         try { startActivity(intent); }
         catch (ActivityNotFoundException | SecurityException unavailable) {
-            Toast.makeText(this, "Раздел недоступен в этой прошивке", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.apple_section_unavailable, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -3,18 +3,18 @@ package com.gathin.tvhome;
 /** WMO interpretation shared by the weather card and its accessibility text. */
 final class WeatherConditions {
     private WeatherConditions() { }
-    static String label(int code) {
-        if (code == 0) return "Ясно";
-        if (code == 1) return "Малооблачно";
-        if (code == 2) return "Переменная облачность";
-        if (code == 3) return "Облачно";
-        if (code == 45 || code == 48) return "Туман";
-        if (code >= 51 && code <= 57) return "Морось";
-        if (code >= 61 && code <= 67) return "Дождь";
-        if ((code >= 71 && code <= 77) || code == 85 || code == 86) return "Снег";
-        if (code >= 80 && code <= 82) return "Ливень";
-        if (code == 95 || code == 96 || code == 99) return "Гроза";
-        return "Погода";
+    static int labelResource(int code) {
+        if (code == 0) return R.string.apple_clear;
+        if (code == 1) return R.string.apple_mostly_clear;
+        if (code == 2) return R.string.apple_partly_cloudy;
+        if (code == 3) return R.string.apple_cloudy;
+        if (code == 45 || code == 48) return R.string.apple_fog;
+        if (code >= 51 && code <= 57) return R.string.apple_drizzle;
+        if (code >= 61 && code <= 67) return R.string.apple_rain;
+        if ((code >= 71 && code <= 77) || code == 85 || code == 86) return R.string.apple_snow;
+        if (code >= 80 && code <= 82) return R.string.apple_showers;
+        if (code == 95 || code == 96 || code == 99) return R.string.apple_thunderstorm;
+        return R.string.apple_weather;
     }
     static boolean fresh(long saved, long now, long ttl) {
         return saved > 0 && now >= saved && now - saved < ttl;

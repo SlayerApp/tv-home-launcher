@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="system_menu_name">Помощник системного меню</string>
-    <string name="system_menu_description">По нажатию «Перезагрузка» открывает раздел «Система» и выделяет пункт перезагрузки. Не перехватывает клавиши пульта. Не перезагружает ТВ и не отправляет данные экрана в сеть.</string>
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="system_menu_name">System menu helper</string>
+    <string name="system_menu_description">After you press Restart, opens System and focuses the restart item. Does not intercept remote keys, restart the TV or send screen content over the network.</string>
 </resources>

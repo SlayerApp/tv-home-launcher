@@ -66,10 +66,10 @@ public final class SystemMenuService extends AccessibilityService {
 
     static void open(Activity activity) {
         if (connected == null) {
-            new AlertDialog.Builder(activity).setTitle("Переход в раздел «Система»")
-                    .setMessage("Для автоматического перехода разрешите службу «Помощник системного меню» в специальных возможностях. Она получает доступ к экрану и управлению меню. Код работает только после нажатия «Перезагрузка» и только в системных настройках; клавиши пульта не перехватывает.")
-                    .setPositiveButton("Открыть доступ", (d, w) -> activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
-                    .setNegativeButton("Открыть обычные настройки", (d, w) -> activity.startActivity(new Intent(Settings.ACTION_SETTINGS)))
+            new AlertDialog.Builder(activity).setTitle(R.string.apple_system_shortcut_title)
+                    .setMessage(R.string.apple_system_permission_message)
+                    .setPositiveButton(R.string.apple_open_access, (d, w) -> activity.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                    .setNegativeButton(R.string.apple_open_settings, (d, w) -> activity.startActivity(new Intent(Settings.ACTION_SETTINGS)))
                     .show();
             return;
         }
@@ -112,7 +112,7 @@ public final class SystemMenuService extends AccessibilityService {
             android.util.Log.i("TVHomeSystemMenu", "Navigation deadline reached");
             boolean opened = systemChosen;
             stop();
-            if (!opened) Toast.makeText(this, "Система → Перезагрузить", Toast.LENGTH_LONG).show();
+            if (!opened) Toast.makeText(LauncherLocale.wrap(this), R.string.apple_system_restart_hint, Toast.LENGTH_LONG).show();
             return;
         }
         AccessibilityNodeInfo root = getRootInActiveWindow();
@@ -217,7 +217,7 @@ public final class SystemMenuService extends AccessibilityService {
             }
             schedule(400);
         } catch (RuntimeException unavailable) {
-            stop(); Toast.makeText(this, "Система → Перезагрузить", Toast.LENGTH_LONG).show();
+            stop(); Toast.makeText(LauncherLocale.wrap(this), R.string.apple_system_restart_hint, Toast.LENGTH_LONG).show();
         } finally {
             for (AccessibilityNodeInfo n : nodes) n.recycle();
         }

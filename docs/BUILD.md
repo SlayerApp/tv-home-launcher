@@ -21,7 +21,7 @@ chmod +x gradlew
 
 Результат: `app/build/outputs/apk/release/app-release.apk`.
 
-Параметры текущего переносного приложения: `com.gathin.tvhome`, versionCode 12, versionName `3.2-portable2`, minSdk 26, targetSdk 34. Нативных библиотек с привязкой к архитектуре процессора нет.
+Параметры текущего переносного приложения: `com.gathin.tvhome`, versionCode 16, versionName `3.4-portable4`, minSdk 26, targetSdk 34. Нативных библиотек с привязкой к архитектуре процессора нет.
 
 ## Подпись и обновления
 

@@ -12,13 +12,21 @@ Requirements: Android TV / Google TV running Android 8.0 or later. The app appea
 4. Select this app as the default Home app in the TV’s settings, if that option is available. Names and locations vary by firmware.
 5. If the Home button still opens the original launcher, a model-specific setup may be needed. This APK does not disable system apps. Do not apply another TV’s cleanup or disable lists without checking the model.
 
+## Language
+
+Open **Settings → Language → Русский / English**. The choice updates Home, launcher settings and dialogs, and survives APK updates. Native TV settings keep the TV’s system language.
+
+## Backgrounds
+
+Open **Settings → Background**. Off restores the previous look. Seven themes include paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. All 28 images are 3840×2160 upscaled illustrations. Automatic follows the TV clock: morning 06–11, day 11–17, evening 17–22, night 22–06. Manual time selection is also available. Android determines UI resolution; the tested Xiaomi firmware limits menus to 1080p. The standby screensaver is preserved.
+
 ## Apps, inputs and VPN
 
-kino.watch, YouTube, Kinopoisk, START, Apple TV, Happ and any AirPlay receiver must be installed and configured separately. Accounts, passwords and VPN subscriptions are not included. New TV apps appear automatically; visibility is controlled by “Показывать приложения” (Show apps). The VPN button opens Happ if installed.
+kino.watch, YouTube, Kinopoisk, START, Apple TV, Happ and any AirPlay receiver must be installed and configured separately. Accounts, passwords and VPN subscriptions are not included. New TV apps appear automatically; visibility is controlled by “Show apps”. The VPN button opens Happ if installed.
 
 The TV tile opens the built-in tuner. If no tuner is available, the launcher tries the available TV or input selection route. Home returns to the launcher configured as the default Home app.
 
-“Названия HDMI” (HDMI names) lets you label any physical HDMI port or remove its label. Default labels use HDMI numbers, without a preassigned Apple TV name. These names are saved in the launcher and do not overwrite the TV’s system labels.
+“HDMI names” lets you label any physical HDMI port or remove its label. Default labels use HDMI numbers, without a preassigned Apple TV name. These names are saved in the launcher and do not overwrite the TV’s system labels.
 
 ## Weather
 
@@ -30,9 +38,9 @@ Sources: [Open-Meteo](https://open-meteo.com/), [wttr.in](https://wttr.in/), [IP
 
 ## Bluetooth and restart
 
-“Bluetooth и пульт” (Bluetooth and remote) opens the available native accessories menu.
+“Bluetooth and remote” opens the available native accessories menu.
 
-For automatic navigation from “Перезагрузка” (Restart) to the native System menu, enable “Помощник системного меню” (System menu helper) in Android Accessibility settings when prompted. Android grants access to screen content and menu control. After an explicit shortcut press, the helper navigates native settings for up to 20 seconds and focuses Restart. The user confirms the restart. It does not intercept remote keys. Permission stays enabled until the service is disabled manually. Without it, the shortcut offers ordinary system settings. Precise remote-command navigation is supported on Android 13+; other firmware layouts may differ.
+For automatic navigation from “Restart” to the native System menu, enable “System menu helper” in Android Accessibility settings when prompted. Android grants access to screen content and menu control. After an explicit shortcut press, the helper navigates native settings for up to 20 seconds and focuses Restart. The user confirms the restart. It does not intercept remote keys. Permission stays enabled until the service is disabled manually. Without it, the shortcut offers ordinary system settings. Precise remote-command navigation is supported on Android 13+; other firmware layouts may differ.
 
 ## Test status
 

@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 
 public class WeatherConditionsTest {
     @Test public void snowShowersAndThunderstormHaveDistinctLabels() {
-        assertEquals("Снег", WeatherConditions.label(85));
-        assertEquals("Ливень", WeatherConditions.label(82));
-        assertEquals("Гроза", WeatherConditions.label(99));
-        assertEquals("Погода", WeatherConditions.label(-1));
+        assertEquals(R.string.apple_snow, WeatherConditions.labelResource(85));
+        assertEquals(R.string.apple_showers, WeatherConditions.labelResource(82));
+        assertEquals(R.string.apple_thunderstorm, WeatherConditions.labelResource(99));
+        assertEquals(R.string.apple_weather, WeatherConditions.labelResource(-1));
     }
     @Test public void oldOrFutureCacheMustNotBeShownAsCurrent() {
         assertTrue(WeatherConditions.fresh(1000, 1500, 1000));
