@@ -1,5 +1,7 @@
 # Проверенные телевизоры
 
+[Русский](TESTED_TVS.md) | [English](TESTED_TVS.en.md)
+
 Дата фиксации: 30 октября 2026 года.
 
 ## Xiaomi Mini LED 55 2025

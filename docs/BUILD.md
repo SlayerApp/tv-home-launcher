@@ -1,5 +1,7 @@
 # Сборка
 
+[Русский](BUILD.md) | [English](BUILD.en.md)
+
 Требуются JDK 17, Android SDK Platform 34 и доступ к Google/Maven Central при первой загрузке зависимостей. Проект использует Android Gradle Plugin 8.5.2 и Gradle Wrapper.
 
 Укажите установленный SDK в переменной `ANDROID_HOME` либо в своём `local.properties`. Этот локальный файл не добавляется в Git.

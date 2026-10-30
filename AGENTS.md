@@ -10,3 +10,4 @@
 - Проверки: `gradlew testReleaseUnitTest lintRelease assembleRelease`. Не называть успешную компиляцию испытанием на реальном телевизоре.
 - Не добавлять ключи подписи, local.properties, кэши, личные настройки, диагностические снимки и резервные копии устройств.
 - Основу и лицензии Gathin23/cleanyourtv и Outfit сохранять. Не переносить сюда частный журнал настройки первого телевизора.
+- Документация доступна на русском и английском: README.md/README.en.md, docs/BUILD.md/BUILD.en.md, TESTED_TVS.md/TESTED_TVS.en.md, INSTALL.ru.txt/INSTALL.en.md. При изменениях поведения обновлять обе версии и сохранять ссылки переключения языка.

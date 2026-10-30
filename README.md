@@ -1,5 +1,7 @@
 # TV Home Launcher
 
+[Русский](README.md) | [English](README.en.md)
+
 Лёгкий главный экран для Android TV / Google TV с оформлением в стиле Apple TV.
 
 **Переносная сборка: 3.2-portable2.** Требуется Android 8.0 или новее. Это приложение-лаунчер, а не прошивка Android или tvOS.
