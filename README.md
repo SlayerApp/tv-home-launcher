@@ -8,7 +8,7 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 
 ## Download and install
 
-- [Download the APK](downloads/TV-Home-Apple-Style.apk?raw=1)
+- [Download the APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk)
 - [Installation guide](docs/INSTALL.en.md)
 - [SHA-256 checksum](downloads/SHA256.txt)
 

@@ -8,7 +8,7 @@
 
 ## Скачать и установить
 
-- [Установочный APK](downloads/TV-Home-Apple-Style.apk?raw=1)
+- [Установочный APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk)
 - [Инструкция](docs/INSTALL.ru.txt)
 - [Контрольная сумма SHA-256](downloads/SHA256.txt)
 
