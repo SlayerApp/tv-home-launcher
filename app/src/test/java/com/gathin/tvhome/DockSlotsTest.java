@@ -5,11 +5,87 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class DockSlotsTest {
+    private static Map<String, Integer> ranks(List<String> keys) {
+        Map<String, Integer> ranks = new HashMap<>();
+        for (int i = 0; i < keys.size(); i++) ranks.put(keys.get(i), i);
+        return ranks;
+    }
+
+    @Test public void movingTvIntoOneVacantSlotDoesNotAlsoDockHome() {
+        List<String> slots = new ArrayList<>(Arrays.asList("youtube", DockSlots.emptyKey(1),
+                DockSlots.emptyKey(2), DockSlots.emptyKey(3), "tv", "home", "other"));
+        Collections.swap(slots, 4, 2);
+        List<String> saved = DockSlots.savedKeys(slots, 4);
+        assertEquals(Arrays.asList("youtube", DockSlots.emptyKey(1), "tv", DockSlots.emptyKey(3), "home", "other"), saved);
+        assertEquals(saved, DockSlots.restoreGaps(Arrays.asList("youtube", "tv", "home", "other"), ranks(saved), 4, 4));
+    }
+
+    @Test public void movingHomeToFourthPlacePreservesBothEarlierGaps() {
+        List<String> slots = new ArrayList<>(Arrays.asList("youtube", DockSlots.emptyKey(1),
+                DockSlots.emptyKey(2), DockSlots.emptyKey(3), "tv", "home"));
+        Collections.swap(slots, 5, 3);
+        List<String> saved = DockSlots.savedKeys(slots, 4);
+        assertEquals("home", saved.get(3));
+        assertEquals("tv", saved.get(4));
+        assertEquals(saved, DockSlots.restoreGaps(Arrays.asList("youtube", "home", "tv"), ranks(saved), 4, 4));
+    }
+
+    @Test public void arrowMovePastAGapLeavesOtherAppsInTheirPlaces() {
+        List<String> slots = new ArrayList<>(Arrays.asList("youtube", "tv", DockSlots.emptyKey(2), "home", "other"));
+        Collections.swap(slots, 1, 2);
+        assertEquals(Arrays.asList("youtube", DockSlots.emptyKey(1), "tv", "home", "other"), DockSlots.savedKeys(slots, 4));
+    }
+
+    @Test public void hiddenOrUninstalledDockAppDoesNotPullAnUnrelatedAppIntoItsPlace() {
+        List<String> saved = Arrays.asList("youtube", DockSlots.emptyKey(1), "tv", "home", "other");
+        assertEquals(Arrays.asList(DockSlots.emptyKey(0), DockSlots.emptyKey(1), "tv", "home", "other"),
+                DockSlots.restoreGaps(Arrays.asList("tv", "home", "other"), ranks(saved), 4, 4));
+    }
+
+    @Test public void legacyCompactOrdersStillUseTheExistingLoader() {
+        assertNull(DockSlots.restoreGaps(Arrays.asList("youtube", "tv", "home"),
+                ranks(Arrays.asList("youtube", "tv", "home")), 4, 1));
+    }
+
+    @Test public void completelyVacantDockCanBeSavedWithoutPromotingGridApps() {
+        List<String> saved = Arrays.asList(DockSlots.emptyKey(0), DockSlots.emptyKey(1),
+                DockSlots.emptyKey(2), DockSlots.emptyKey(3), "tv", "home");
+        assertEquals(saved, DockSlots.restoreGaps(Arrays.asList("tv", "home"), ranks(saved), 4, 4));
+    }
+
+    @Test public void carryingTvOutLeavesAnEmptySlotAndDoesNotDockHome() {
+        List<String> keys = Arrays.asList("youtube", "tv", DockSlots.emptyKey(2), DockSlots.emptyKey(3), "home", "other");
+        assertEquals(Arrays.asList("youtube", DockSlots.emptyKey(1), DockSlots.emptyKey(2),
+                DockSlots.emptyKey(3), "home", "tv", "other"), DockSlots.moveTile(keys, 1, 5, 4));
+    }
+
+    @Test public void carryingTvIntoAVacancyKeepsHomeInTheGrid() {
+        List<String> keys = Arrays.asList("youtube", DockSlots.emptyKey(1), DockSlots.emptyKey(2), DockSlots.emptyKey(3), "tv", "home");
+        assertEquals(Arrays.asList("youtube", DockSlots.emptyKey(1), "tv", DockSlots.emptyKey(3), "home"),
+                DockSlots.moveTile(keys, 4, 2, 4));
+    }
+
+    @Test public void lastDockedTileCanMoveToANewGridRow() {
+        List<String> keys = Arrays.asList("youtube", "tv", "home", DockSlots.emptyKey(3));
+        assertEquals(Arrays.asList("youtube", DockSlots.emptyKey(1), "home", DockSlots.emptyKey(3), "tv"),
+                DockSlots.moveTile(keys, 1, 4, 4));
+    }
+
+    @Test public void replacingOneOccupiedDockPlaceDisplacesOnlyThatApp() {
+        List<String> keys = Arrays.asList("youtube", "music", "film", "tv", "home", "other");
+        assertEquals(Arrays.asList("youtube", "home", "film", "tv", "music", "other"), DockSlots.moveTile(keys, 4, 1, 4));
+    }
+
     private static Set<String> set(String... keys) {
         return new HashSet<>(Arrays.asList(keys));
     }
@@ -66,12 +142,12 @@ public class DockSlotsTest {
         assertEquals(0, DockSlots.empty(6, 6, 20, false));
     }
 
-    @Test public void noInstalledDockAppFillsTheFirstRow() {
-        assertEquals(0, DockSlots.empty(0, 4, 20, false));
+    @Test public void explicitlyEmptyDockDoesNotPromoteOtherApps() {
+        assertEquals(4, DockSlots.empty(0, 4, 20, false));
     }
 
-    @Test public void nothingAfterTheDockNeedsNoEmptySlot() {
-        assertEquals(0, DockSlots.empty(2, 4, 2, false));
+    @Test public void nothingAfterTheDockStillKeepsTheVacantPlaces() {
+        assertEquals(2, DockSlots.empty(2, 4, 2, false));
     }
 
     @Test public void focusOnAnEmptySlotGoesToTheLastDockApp() {

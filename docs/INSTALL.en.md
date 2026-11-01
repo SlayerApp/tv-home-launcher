@@ -44,7 +44,7 @@ For automatic navigation from “Restart” to the native System menu, enable �
 
 ## Test status
 
-The portable 3.5 APK was installed and tested on a KIVI 4K Android TV (bangbae), Android 11. The main build was checked on a Xiaomi Mini LED 55 2025, MiTV-MOEU1, Android 14. See [tested models and limitations](TESTED_TVS.en.md).
+The portable 3.6 APK was installed and tested on a KIVI 4K Android TV (bangbae), Android 11. The main build was checked on a Xiaomi Mini LED 55 2025, MiTV-MOEU1, Android 14. See [tested models and limitations](TESTED_TVS.en.md).
 
 Based on Gathin23/cleanyourtv under the MIT license. The original copyright notice and font license are included in the APK assets.
 

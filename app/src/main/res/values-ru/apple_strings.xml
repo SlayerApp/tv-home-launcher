@@ -74,4 +74,6 @@
     <string name="apple_open_access">Открыть доступ</string>
     <string name="apple_open_settings">Открыть обычные настройки</string>
     <string name="apple_system_restart_hint">Система → Перезагрузить</string>
+    <string name="tile_move_arrows_hint">Стрелки — переместить эту плитку. OK — сохранить.</string>
+    <string name="tile_remove_from_dock">Убрать из дока</string>
 </resources>

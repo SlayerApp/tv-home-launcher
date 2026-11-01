@@ -74,4 +74,6 @@
     <string name="apple_open_access">Open Accessibility</string>
     <string name="apple_open_settings">Open settings</string>
     <string name="apple_system_restart_hint">System → Restart</string>
+    <string name="tile_move_arrows_hint">Use arrows to move this tile. OK saves.</string>
+    <string name="tile_remove_from_dock">Remove from dock</string>
 </resources>

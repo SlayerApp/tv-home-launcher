@@ -341,10 +341,18 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         docked = 0;
         while (docked < fresh.size() && isDocked(fresh.get(docked))) docked++;
-        emptySlots = dockRow && !reordering ? DockSlots.empty(docked, dockSize, fresh.size(), fillDock) : 0;
+        // With no installed favourite, the initial dock uses the first row. A saved empty dock stays empty.
+        if (dockRow && !fillDock && savedDocked < 0 && docked == 0) docked = Math.min(dockSize, fresh.size());
+        emptySlots = dockRow ? DockSlots.empty(docked, dockSize, fresh.size(), fillDock) : 0;
         for (int i = 0; i < emptySlots; i++) {
             fresh.add(docked + i, new Entry(Entry.EMPTY, "", new ComponentName(ctx, "empty-dock-slot-" + i),
                     null, null, null, 0));
+        }
+        if (dockRow && !fillDock) {
+            List<String> liveKeys = new ArrayList<>();
+            for (Entry entry : fresh) if (entry.kind != Entry.EMPTY) liveKeys.add(entry.component.flattenToShortString());
+            List<String> restored = DockSlots.restoreGaps(liveKeys, savedRanks, dockSize, savedDocked);
+            if (restored != null) fresh = entriesInOrder(fresh, restored);
         }
         items.clear();
         items.addAll(fresh);
@@ -622,7 +630,19 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return rank != null && rank < savedDocked;
     }
 
-    /** Reorder mode on or off; takes effect at the next reload() (empty dock slots are left out while on). */
+    private List<Entry> entriesInOrder(List<Entry> source, List<String> keys) {
+        Map<String, Entry> entries = new HashMap<>();
+        for (Entry entry : source) entries.put(entry.component.flattenToShortString(), entry);
+        List<Entry> ordered = new ArrayList<>();
+        for (String key : keys) {
+            if (DockSlots.isEmptyKey(key)) ordered.add(new Entry(Entry.EMPTY, "",
+                    ComponentName.unflattenFromString(key), null, null, null, 0));
+            else if (entries.containsKey(key)) ordered.add(entries.get(key));
+        }
+        return ordered;
+    }
+
+    /** Reorder mode keeps dock vacancies in place. */
     void setReordering(boolean on) {
         reordering = on;
     }
@@ -645,6 +665,28 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (e.kind != Entry.EMPTY) keys.add(e.component.flattenToShortString());
         }
         return keys;
+    }
+
+    List<String> savedKeys() {
+        List<String> keys = new ArrayList<>();
+        for (int i = 0; i < movableCount(); i++) keys.add(keyAt(i));
+        return DockSlots.savedKeys(keys, dockSize);
+    }
+
+    boolean isEmptyAt(int position) {
+        return position >= 0 && position < items.size() && items.get(position).kind == Entry.EMPTY;
+    }
+
+    /** Move the chosen tile without promoting neighbouring grid apps into vacant dock places. */
+    void moveOne(int from, int to) {
+        boolean appendToGrid = from < dockSize && to == movableCount() && to >= dockSize;
+        if (from < 0 || to < 0 || from >= movableCount() || (to >= movableCount() && !appendToGrid)) return;
+        List<String> keys = new ArrayList<>();
+        for (Entry entry : items) keys.add(entry.component.flattenToShortString());
+        List<Entry> moved = entriesInOrder(items, DockSlots.moveTile(keys, from, to, dockSize));
+        items.clear();
+        items.addAll(moved);
+        notifyDataSetChanged();
     }
 
     /** Moves one tile; the others shift by one. Stable ids keep the moved tile's view (and its focus). */
@@ -675,12 +717,22 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /** Dock slots that hold an app: the whole dock unless some slots are empty. */
     int dockFilled() {
-        return emptySlots > 0 ? docked : dockSize;
+        int filled = 0;
+        for (int i = 0; i < Math.min(dockSize, items.size()); i++) if (!isEmptyAt(i)) filled++;
+        return filled;
     }
 
     /** A position focus can land on: an empty dock slot gives the last dock app. */
     int focusablePosition(int position) {
-        return DockSlots.focusable(position, docked, emptySlots);
+        if (!isEmptyAt(position)) return position;
+        int start = position < dockSize ? 0 : dockSize;
+        int end = position < dockSize ? Math.min(dockSize, items.size()) : items.size();
+        for (int step = 1; step < items.size(); step++) {
+            if (position - step >= start && !isEmptyAt(position - step)) return position - step;
+            if (position + step < end && !isEmptyAt(position + step)) return position + step;
+        }
+        for (int i = 0; i < items.size(); i++) if (!isEmptyAt(i)) return i;
+        return position;
     }
 
     String labelAt(int position) {

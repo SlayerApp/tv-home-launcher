@@ -329,6 +329,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private int dockEditSlot = -1;
     /** Tile menu's "Add to dock": the app waiting for a dock place in edit-dock mode, or null. */
     private String dockEditAppKey;
+    private boolean singleTileMove;
     private AppLibraryDialog appLibrary;
     private boolean appLibrarySelection;
     private boolean libraryOkOpens;
@@ -1055,6 +1056,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (openLauncherSettingsIfAsked(intent)) return;
         if (openInputsIfAsked(intent)) return;
         if (intent == null || !intent.hasCategory(Intent.CATEGORY_HOME)) return;
+        overridePendingTransition(0, 0);
         if (gameDay != null && !stopped) gameDay.read();
         grid.scrollToPosition(0);
         lastFocused = 0;
@@ -1085,6 +1087,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     @Override
     protected void onResume() {
         super.onResume();
+        // Home is ready behind the TV task: reveal it directly rather than animating the native TV menu.
+        overridePendingTransition(0, 0);
         resumed = true;
         // A festival that started or ended while Home was in the background: rebuild with or without it.
         if (festive != festival.active(LocalDate.now())) {
@@ -1445,7 +1449,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                     return true;
                 default:
                     if (ok || back) {
-                        if (!down) drop();
+                        if (!down) {
+                            if (singleTileMove) {
+                                String placedKey = movingKey;
+                                endReorder();
+                                refocusAfterLayout(adapter.positionOf(placedKey));
+                            } else drop();
+                        }
                         return true;
                     }
                     return super.dispatchKeyEvent(event);
@@ -1498,11 +1508,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // Before the reload below: once it has dropped the empty slots, the dock row also shows grid apps.
         dockInSession = new HashSet<>();
         dockedAtStart = adapter.dockFilled();
-        for (int i = 0; i < Math.min(dockedAtStart, adapter.movableCount()); i++) dockInSession.add(adapter.keyAt(i));
+        for (int i = 0; i < Math.min(COLUMNS, adapter.movableCount()); i++)
+            if (!adapter.isEmptyAt(i)) dockInSession.add(adapter.keyAt(i));
         adapter.setReordering(true);
-        if (adapter.hasEmptySlots()) reloadTiles();   // every position must hold a tile that can move
         reordering = true;
-        orderAtStart = adapter.movableKeys();
+        orderAtStart = fillDockLeavesSlots ? adapter.savedKeys() : adapter.movableKeys();
         glass.setAccent(REORDER_ACCENT);
         btnReorder.setActivated(true);
         return true;
@@ -1574,24 +1584,38 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * Edit-dock mode started from the tile menu. A dock app: its place is already chosen, so focus goes to the grid
      * for the app to put there. A grid app: it is already chosen, so focus goes to the dock for the place.
      */
-    private void startDockEditFor(String key, boolean inDock) {
+    private void startTileMove(String key, boolean addToDock) {
         if (reordering) endReorder();
         if (!beginReorder()) return;
-        dockEditing = true;
-        int pos = adapter.positionOf(key);   // beginReorder can rebuild the tiles
-        int n = adapter.movableCount();
-        if (pos < 0) {
-            endReorder();
-        } else if (inDock) {
-            dockEditSlot = pos;
-            dimOthers();
-            focusTile(Math.min(COLUMNS, n - 1));
-            Toast.makeText(this, R.string.dock_edit_pick_app, Toast.LENGTH_LONG).show();
-        } else {
-            dockEditAppKey = key;
-            focusTile(0);
-            Toast.makeText(this, R.string.dock_edit_pick_place, Toast.LENGTH_LONG).show();
+        singleTileMove = true;
+        int position = adapter.positionOf(key);
+        if (position < 0) { endReorder(); return; }
+        if (addToDock && position >= COLUMNS) {
+            int slot = position % COLUMNS;
+            for (int i = 0; i < Math.min(COLUMNS, adapter.movableCount()); i++) {
+                if (adapter.isEmptyAt(i)) { slot = i; break; }
+            }
+            final int from = position, to = slot;
+            keepScroll(() -> {
+                if (fillDockLeavesSlots) adapter.moveOne(from, to);
+                else { adapter.move(from, to); }
+            });
+            position = adapter.positionOf(key);
         }
+        pickUp(position);
+        refocusAfterLayout(position);
+        Toast.makeText(this, R.string.tile_move_arrows_hint, Toast.LENGTH_LONG).show();
+    }
+
+    private void removeFromDock(String key) {
+        if (reordering) endReorder();
+        if (!beginReorder()) return;
+        int from = adapter.positionOf(key);
+        if (from < 0 || from >= COLUMNS) { endReorder(); return; }
+        int to = adapter.movableCount();
+        keepScroll(() -> adapter.moveOne(from, to));
+        endReorder();
+        refocusAfterLayout(adapter.positionOf(key));
     }
 
     /** Puts the app at pos into dock place slot, and the app that was there where the chosen one was; then saves. */
@@ -1599,8 +1623,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         String slotKey = adapter.keyAt(slot);
         if (pos != slot) {
             keepScroll(() -> {
-                adapter.move(pos, slot);
-                adapter.move(adapter.positionOf(slotKey), pos);
+                if (fillDockLeavesSlots) adapter.moveOne(pos, slot);
+                else {
+                    adapter.move(pos, slot);
+                    adapter.move(adapter.positionOf(slotKey), pos);
+                }
             });
             dockInSession.add(adapter.keyAt(slot));
             if (pos >= COLUMNS) dockInSession.remove(slotKey);
@@ -1641,6 +1668,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     /** Ends the mode and saves the order if it changed since the mode started. */
     private void endReorder() {
         if (!reordering) return;
+        singleTileMove = false;
         dockEditing = false;
         dockEditSlot = -1;
         dockEditAppKey = null;
@@ -1656,8 +1684,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // come back after the mode go after it (#499). With fill_dock true every dock slot holds an app anyway.
         int docked = -1;
         if (fillDockLeavesSlots) {
-            docked = DockSlots.dockCount(keys, COLUMNS, dockInSession);
-            keys = DockSlots.dockFirst(keys, COLUMNS, dockInSession);
+            docked = Math.min(COLUMNS, adapter.movableCount());
+            keys = adapter.savedKeys();
         }
         dockInSession = null;
         if (!keys.equals(before) || (fillDockLeavesSlots && docked != dockedAtStart)) {
@@ -1690,9 +1718,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) to = rtlAppGrid ? from - 1 : from + 1;
         else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) to = from - COLUMNS;
         else if (from + COLUMNS < n) to = from + COLUMNS;
+        else if (fillDockLeavesSlots && from < COLUMNS && n <= COLUMNS) to = n;
         else to = from / COLUMNS < (n - 1) / COLUMNS ? n - 1 : from;
-        if (to < 0 || to >= n || to == from) return;
-        keepScroll(() -> adapter.move(from, to));
+        boolean appendToGrid = fillDockLeavesSlots && from < COLUMNS && to == n;
+        if (to < 0 || (to >= n && !appendToGrid) || to == from) return;
+        keepScroll(() -> {
+            if (fillDockLeavesSlots) adapter.moveOne(from, to);
+            else adapter.move(from, to);
+        });
         // The owner carries this tile: where it lands decides whether it is in the dock, not dock_apps (#499).
         if (to < COLUMNS) dockInSession.add(movingKey);
         else dockInSession.remove(movingKey);
@@ -2062,9 +2095,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 heroDots.addView(dot, lp);
             }
         }
+        int focusedDot = -1;
+        for (int i = 0; i <= position && i < COLUMNS; i++) if (!adapter.isEmptyAt(i)) focusedDot++;
         for (int i = 0; i < count; i++) {
             View dot = heroDots.getChildAt(rtlAppGrid ? count - 1 - i : i);
-            boolean on = i == position;
+            boolean on = i == focusedDot;
             ((GradientDrawable) dot.getBackground()).setColor(on ? 0xFFFFFFFF : 0x4DFFFFFF);
             ViewGroup.LayoutParams lp = dot.getLayoutParams();
             int w = (int) ((on ? 20 : 6) * density);
@@ -2425,8 +2460,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 return true;
             }
             // In the dock, the last app is the row's end: the empty slots after it take no focus.
-            int rowCount = position < COLUMNS ? Math.min(count, adapter.dockFilled()) : count;
-            return GridNavigation.atHorizontalEdge(position, rowCount, COLUMNS,
+            if (position < COLUMNS) {
+                int step = forward ? 1 : -1;
+                for (int next = position + step; next >= 0 && next < Math.min(COLUMNS, count); next += step) {
+                    if (!adapter.isEmptyAt(next)) { focusTile(next); return true; }
+                }
+                return true;
+            }
+            return GridNavigation.atHorizontalEdge(position, count, COLUMNS,
                     rtlAppGrid, keyCode == KeyEvent.KEYCODE_DPAD_LEFT);
         }
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
@@ -3629,20 +3670,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (200 * density));
-        if (dockRow && position < adapter.movableCount()) {
-            boolean inDock = position < COLUMNS;
-            addSettingsMenuRow(rows, popup, inDock ? R.string.tile_replace_in_dock : R.string.tile_add_to_dock,
-                    () -> startDockEditFor(key, inDock));
+        if (dockRow && position >= COLUMNS && position < adapter.movableCount()) {
+            addSettingsMenuRow(rows, popup, R.string.tile_add_to_dock, () -> startTileMove(key, true));
         }
-        if (position < adapter.movableCount()) addSettingsMenuRow(rows, popup, R.string.tile_move, () -> {
-            if (!beginReorder()) return;
-            int at = adapter.positionOf(key);   // beginReorder can rebuild the tiles
-            if (at < 0) return;
-            focusTile(at);
-            pickUp(at);
-            Toast.makeText(this, R.string.reorder_hint, Toast.LENGTH_LONG).show();
-        });
-        if (appLibraryEnabled && !utility) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
+        if (position < adapter.movableCount()) addSettingsMenuRow(rows, popup, R.string.tile_move,
+                () -> startTileMove(key, false));
+        if (dockRow && fillDockLeavesSlots && position < COLUMNS)
+            addSettingsMenuRow(rows, popup, R.string.tile_remove_from_dock, () -> removeFromDock(key));
+        if (!utility) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
             if (LibraryApps.save(this, pkg, false)) reloadApps(false);
             else Toast.makeText(this, R.string.library_save_failed, Toast.LENGTH_LONG).show();
         });

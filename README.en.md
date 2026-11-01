@@ -4,11 +4,11 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build: 3.5-portable5.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
+**Portable build: 3.6-portable6.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
-- [Download the APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk)
+- [Download the APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6)
 - [Installation guide](docs/INSTALL.en.md)
 - [SHA-256 checksum](downloads/SHA256.txt)
 
@@ -76,7 +76,7 @@ Enabled state, theme and time mode are saved. Automatic follows the TV clock; Of
 | KIVI 4K Android TV (bangbae) | Android 11 / API 30 | Portable 3.5: installation, Home after reboot, RU/EN, backgrounds, TV/Home movement, Bluetooth and inputs |
 | Other Android TV / Google TV models | Declared minimum: Android 8 / API 26 | Installation and operation have not been tested on real devices yet |
 
-**Build distinction:** Xiaomi uses the main build, including TV/Home movement checks in 3.5. KIVI was installed and tested with this repository’s portable 3.5-portable5 APK. Testing these two devices does not establish compatibility with every Android TV model.
+**Build distinction:** Xiaomi uses the main build, including TV/Home movement checks in 3.5. KIVI was installed and tested with this repository’s portable 3.6-portable6 APK. Testing these two devices does not establish compatibility with every Android TV model.
 
 See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
@@ -114,6 +114,12 @@ The portable build on a KIVI 4K Android TV running Android 11. These UI captures
 
 ## Arrange tiles and restore the original Home
 
-Hold OK on a tile or press Menu, choose Move, use the arrows, press OK to place it, and Back to save. TV and Home can move alongside applications and remain available in the launcher; their menus do not offer removal.
+Hold OK on a tile or press Menu, choose Move, move this tile with the arrows, and press OK to save. Vacant dock positions stay vacant. Add to dock carries only the selected tile into the dock; Remove from dock returns it to the app grid.
+
+Ordinary apps also offer Remove from Home, which unchecks the same choice in Settings → Show applications without uninstalling the app. Check it again there to restore it. TV and Home cannot be hidden or deleted, but each can be moved or removed from the dock independently.
+
+![Independent dock positions, including an empty place](docs/screenshots/kivi-dock-3.6.png)
+
+![Move, remove from dock and hide an ordinary app](docs/screenshots/kivi-app-menu-3.6.png)
 
 For the tested KIVI, use the [recovery script](tools/Restore-Kivi.ps1) and [recovery guide](docs/RESTORE_KIVI.en.md). Restore only the original Home or all 15 packages from the separate cleanup profile while preserving their data. The APK itself does not disable packages.

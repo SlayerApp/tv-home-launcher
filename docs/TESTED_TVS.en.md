@@ -61,6 +61,20 @@ Full-screen inspection of all 28 backgrounds, actual VPN/AirPlay operation and e
 
 [Restore the original KIVI Home](RESTORE_KIVI.en.md).
 
+## Update 3.6 — checked on 1 November 2026
+
+The final portable 3.6-portable6 / code 18 APK was installed on two KIVI bangbae TVs with Android 11. The separate main 3.6 / code 17 build was installed on the Xiaomi above. All three retained their direct Home handler, disabled-package selection, screensaver, sleep timers and previously enabled services; application data was preserved and no new services or permissions were enabled.
+
+The additional KIVI was used for these actual regression checks:
+
+- TV returned from the dock to the grid without hiding it or moving Home; each utility tile then moved independently using arrows and OK.
+- Empty dock positions and the selected TV/Home positions survived a real reboot. The owner's earlier layout was restored afterwards.
+- Removing YouTube from Home unchecked its Settings entry; checking it again restored the tile in its saved position. No app was uninstalled.
+- TV and Home menus have Remove from dock and Move, but no Remove from Home.
+- The owner confirmed that the brief native TV-screen flash on physical Home disappeared after the launcher stopped the pending window transition. Key filtering and global animation settings were unchanged.
+
+Held-volume behaviour on the additional KIVI was not separately confirmed. The previous Anoki ACR limitation and untested video/VPN/AirPlay cases below still apply.
+
 ## Not yet tested
 
 - Android TV / Google TV models other than the Xiaomi and KIVI listed above.
@@ -72,4 +86,4 @@ There are no confirmed tests on Samsung Tizen or LG webOS; the Android APK is no
 
 ## Automated checks
 
-Portable build: 315 JVM tests, 0 lint errors (101 warnings), successful APK assembly. Signature, ZIP integrity, embedded theme and license files were checked. These checks do not replace installation on a specific model.
+Portable build: 325 JVM tests, 0 lint errors (104 warnings), successful APK assembly. Signature, ZIP integrity, embedded theme and license files were checked. These checks do not replace installation on a specific model.

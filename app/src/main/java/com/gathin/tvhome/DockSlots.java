@@ -2,6 +2,8 @@ package com.gathin.tvhome;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -12,13 +14,73 @@ import java.util.Set;
 final class DockSlots {
     private DockSlots() { }
 
+    private static final String EMPTY_PREFIX = "com.gathin.tvhome/empty-dock-slot-";
+
+    static String emptyKey(int position) { return EMPTY_PREFIX + position; }
+    static boolean isEmptyKey(String key) { return key.startsWith(EMPTY_PREFIX); }
+
+    /** Only the carried tile changes rows; moving out of the dock leaves its place vacant. */
+    static List<String> moveTile(List<String> keys, int from, int to, int dockSize) {
+        List<String> moved = new ArrayList<>(keys);
+        boolean appendToGrid = from < dockSize && to == keys.size() && to >= dockSize;
+        if (from < 0 || to < 0 || from >= keys.size() || (to >= keys.size() && !appendToGrid) || from == to
+                || isEmptyKey(keys.get(from))) return moved;
+        String selected = moved.get(from);
+        if (from < dockSize && to >= dockSize) {
+            moved.set(from, emptyKey(from));
+            moved.add(to, selected);
+        } else if (from >= dockSize && to < dockSize && isEmptyKey(moved.get(to))) {
+            moved.set(to, selected);
+            moved.remove(from);
+        } else if (from < dockSize || to < dockSize) {
+            Collections.swap(moved, from, to);
+        } else {
+            moved.add(to, moved.remove(from));
+        }
+        for (int i = 0; i < Math.min(dockSize, moved.size()); i++) {
+            if (isEmptyKey(moved.get(i))) moved.set(i, emptyKey(i));
+        }
+        return moved;
+    }
+
+    /** Keep vacant dock positions; placeholders carried into the app grid are not saved. */
+    static List<String> savedKeys(List<String> keys, int dockSize) {
+        List<String> saved = new ArrayList<>();
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            if (!key.startsWith(EMPTY_PREFIX)) saved.add(key);
+            else if (i < dockSize) saved.add(emptyKey(i));
+        }
+        return saved;
+    }
+
+    /** Null keeps the legacy compact order. Explicit gaps restore exactly where they were saved. */
+    static List<String> restoreGaps(List<String> liveKeys, Map<String, Integer> ranks,
+                                    int dockSize, int savedDocked) {
+        boolean hasGap = false;
+        for (int i = 0; i < dockSize; i++) {
+            Integer rank = ranks.get(emptyKey(i));
+            if (rank != null && rank < savedDocked && rank < dockSize) hasGap = true;
+        }
+        if (!hasGap) return null;
+        List<String> result = new ArrayList<>();
+        for (int slot = 0; slot < dockSize; slot++) {
+            String key = emptyKey(slot);
+            for (String live : liveKeys) {
+                Integer rank = ranks.get(live);
+                if (rank != null && rank == slot && rank < savedDocked) { key = live; break; }
+            }
+            result.add(key);
+        }
+        for (String key : liveKeys) if (!result.contains(key)) result.add(key);
+        return result;
+    }
+
     /**
-     * Empty slots to put after the {@code docked} dock apps found. None when the dock is full, when no
-     * dock app is installed (the first row fills so Home still has a dock) or when nothing follows.
+     * Vacancies remain real positions even when the app grid is empty, so a dock tile can move down into it.
      */
     static int empty(int docked, int dockSize, int tiles, boolean fill) {
-        if (fill || docked <= 0 || docked >= dockSize || tiles <= docked) return 0;
-        return dockSize - docked;
+        return fill ? 0 : Math.max(0, dockSize - docked);
     }
 
     /**
