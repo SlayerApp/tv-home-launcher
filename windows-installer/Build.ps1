@@ -22,10 +22,12 @@ $OutputDirectory = (New-Item -Path $OutputDirectory -ItemType Directory -Force).
 $output = Join-Path $OutputDirectory 'TV-Home-Installer.exe'
 $guideName = 'TV-Home-USB-Instruction.txt'
 $guide = Join-Path $OutputDirectory $guideName
+$icon = Join-Path $PSScriptRoot 'TV-Home-Installer.ico'
 $guideText = [IO.File]::ReadAllText((Join-Path $PSScriptRoot $guideName)) -replace '\r?\n', "`r`n"
 [IO.File]::WriteAllText($guide, $guideText, [Text.UTF8Encoding]::new($true))
 & $compiler /nologo /target:winexe /platform:anycpu /optimize+ /codepage:65001 `
     /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.IO.Compression.dll "/out:$output" `
+    "/win32icon:$icon" "/resource:$icon,installer.ico" `
     "/resource:$portable,launcher.apk" "/resource:$guide,usb-guide.txt" "/resource:$adbBundle,adb-windows.zip" `
     (Join-Path $PSScriptRoot 'InstallerCore.cs') (Join-Path $PSScriptRoot 'AdbTools.cs') (Join-Path $PSScriptRoot 'InstallerWindow.cs')
 if ($LASTEXITCODE -ne 0) { throw 'Windows installer compilation failed.' }

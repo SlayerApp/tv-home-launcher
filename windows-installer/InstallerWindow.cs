@@ -58,7 +58,8 @@ namespace TvHomeInstaller
         internal InstallerWindow()
         {
             Text = "TV Home Installer";
-            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            using (var artwork = typeof(InstallerWindow).Assembly.GetManifestResourceStream("installer.ico"))
+                Icon = new Icon(artwork, 64, 64);
             StartPosition = FormStartPosition.CenterScreen;
             ClientSize = new Size(710, 598);
             MinimumSize = new Size(650, 604);
@@ -76,8 +77,21 @@ namespace TvHomeInstaller
             body.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
             Controls.Add(body);
 
-            body.Controls.Add(MakeLabel("TV Home Installer", 22, true), 0, 0);
-            body.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.6", 10, false), 0, 1);
+            var heading = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, Margin = new Padding(0) };
+            heading.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 64));
+            heading.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            heading.RowStyles.Add(new RowStyle(SizeType.Absolute, 37));
+            heading.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            var emblem = new PictureBox { Image = Icon.ToBitmap(), Size = new Size(48, 48), Anchor = AnchorStyles.Left,
+                Margin = new Padding(0), SizeMode = PictureBoxSizeMode.Zoom };
+            var windowIcon = Icon;
+            Disposed += (sender, args) => { emblem.Image.Dispose(); windowIcon.Dispose(); };
+            heading.Controls.Add(emblem, 0, 0);
+            heading.SetRowSpan(emblem, 2);
+            heading.Controls.Add(MakeLabel("TV Home Installer", 22, true), 1, 0);
+            heading.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.6", 10, false), 1, 1);
+            body.Controls.Add(heading, 0, 0);
+            body.SetRowSpan(heading, 2);
             var connectionHeading = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Margin = new Padding(0) };
             connectionHeading.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             connectionHeading.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));

@@ -59,6 +59,8 @@ namespace TvHomeInstaller
                     .SetValue(null, platformFolder);
             }
             VerifyResource(assembly, "launcher.apk", args[1]);
+            VerifyResource(assembly, "installer.ico", Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                @"..\windows-installer\TV-Home-Installer.ico"));
             Check(assembly.GetManifestResourceNames().Count(x => x.EndsWith(".apk")) == 1, "single universal APK");
             string guidePath = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[0])), "TV-Home-USB-Instruction.txt");
             VerifyResource(assembly, "usb-guide.txt", guidePath);
@@ -91,6 +93,9 @@ namespace TvHomeInstaller
                     ui.Stop();
                     try
                     {
+                        var emblem = controls.OfType<PictureBox>().Single();
+                        Check(emblem.Visible && emblem.Width >= 32 && emblem.Height >= 32 && emblem.Image != null,
+                            "color icon appears in the installer heading");
                         if (platformFolder != null)
                         {
                             Check(AdbTools.IsReady(platformFolder), "first connection extracted bundled ADB offline");
