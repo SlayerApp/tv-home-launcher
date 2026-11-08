@@ -96,6 +96,9 @@ namespace TvHomeInstaller
                         var emblem = controls.OfType<PictureBox>().Single();
                         Check(emblem.Visible && emblem.Width >= 32 && emblem.Height >= 32 && emblem.Image != null,
                             "color icon appears in the installer heading");
+                        using (var bitmap = new Bitmap(emblem.Image))
+                            Check(bitmap.GetPixel(0, 0).A == 0 && bitmap.GetPixel(bitmap.Width / 2, 0).A > 240,
+                                "installer icon has rounded, transparent corners");
                         if (platformFolder != null)
                         {
                             Check(AdbTools.IsReady(platformFolder), "first connection extracted bundled ADB offline");

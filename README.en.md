@@ -8,7 +8,7 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 
 ## Download and install
 
-- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-icon) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
+- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-rounded) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
 - [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108).
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
