@@ -4,15 +4,15 @@
 
 Лёгкий главный экран для Android TV / Google TV с оформлением в стиле Apple TV.
 
-**Переносная сборка: 3.6-portable6.** Требуется Android 8.0 или новее. Это приложение-лаунчер, а не прошивка Android или tvOS.
+**Переносная сборка 3.6-portable6.** Для Android TV и Google TV с Android 8–14.
 
 ## Скачать и установить
 
-- [Установочный APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6)
-- [Инструкция](docs/INSTALL.ru.txt)
-- [Контрольная сумма SHA-256](downloads/SHA256.txt)
+- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
+- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108).
+- [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 
-Скопируйте APK на флешку, откройте файловым менеджером на телевизоре и установите. Затем назначьте «Главный экран» приложением Home по умолчанию, если прошивка позволяет. На некоторых моделях для назначения Home нужна отдельная настройка под конкретный телевизор.
+Для Windows и флешки используется один APK. Если после установки с флешки Home открывает штатный экран, подключите ТВ в Windows-установщике и нажмите «Выключить старый». Кнопка «Включить старый» возвращает его. Переключение требует сетевой отладки и зависит от прошивки телевизора.
 
 Приложения, аккаунты, VPN-подписки и AirPlay-приёмник в APK не входят. Лаунчер не отключает системные приложения автоматически.
 
@@ -88,7 +88,7 @@ VPN-кнопка открывает отдельно установленный 
 
 В `app/src` находятся исходники переносной сборки и JVM-тесты. Для сборки нужны JDK 17 и Android SDK 34. Команды и особенности подписи: [BUILD.md](docs/BUILD.md).
 
-Проверка текущей сборки: 315 JVM-тестов пройдены, Android lint — 0 ошибок и 101 предупреждение, release APK собран. Это автоматические проверки кода, а не испытания на дополнительных телевизорах.
+При сборке Android-релиза прошли 325 JVM-тестов. Android lint показал 0 ошибок и 104 предупреждения. [Исходники Windows-установщика](windows-installer/) включают скрипт сборки и программу проверки.
 
 ## Основа и лицензии
 

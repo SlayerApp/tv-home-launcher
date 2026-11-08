@@ -19,3 +19,4 @@
 - Portable3.5 реально проверен на KIVI bangbae/Android11, main3.5 на Xiaomi/API34. Факты/ограничения в TESTED_TVS RUEN. tools/Restore-Kivi.ps1 — отдельный профиль восстановления только проверенного KIVI/API30 с обязательным адресом пользователя; не включать его в APK или автоматический setup.
 
 - 3.6: 325 tests/0 lint errors/104 warnings; installed on two KIVI Android11 and Xiaomi Android14. Verified device cases and limits are in TESTED_TVS RU/EN. Preserve the signing identity, owner settings, key_filter=false and original screensaver.
+- `windows-installer/` builds the offline Windows EXE with the same APK, bundled ADB 37.0.1 and USB TXT. Keep upstream notices in the ADB resource, the default Home launch guard and reversible stock toggle. Android 8 recovery has a simulated resolver test.

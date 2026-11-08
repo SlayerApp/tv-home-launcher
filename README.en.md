@@ -4,15 +4,15 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build: 3.6-portable6.** Requires Android 8.0 or later. This is a launcher app, not Android or tvOS firmware. The launcher interface and documentation are available in English and Russian.
+**Portable build 3.6-portable6.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
-- [Download the APK](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6)
-- [Installation guide](docs/INSTALL.en.md)
-- [SHA-256 checksum](downloads/SHA256.txt)
+- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
+- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108).
+- [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
-Copy the APK to a USB drive, open it with a file manager on the TV, and install it. Then select “Главный экран” (Home) as the default Home app if the firmware supports this. Some models require a separate, model-specific setup to change the default launcher.
+Use the same APK for Windows and USB installation. If Home still opens the stock launcher after USB installation, connect the TV with the Windows installer and choose **Выключить старый** (Turn off stock Home). **Включить старый** (Turn on stock Home) restores it. These controls require network debugging and firmware support for changing Home.
 
 Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bundled. The launcher does not automatically disable system apps.
 
@@ -92,7 +92,7 @@ AirPlay availability, VPN connectivity and playback in third-party players are s
 
 `app/src` contains the portable build’s source and JVM tests. Building requires JDK 17 and Android SDK 34. Commands and signing details: [BUILD.en.md](docs/BUILD.en.md).
 
-Current build validation: 315 JVM tests passed, Android lint reported 0 errors and 101 warnings, and the release APK was built successfully. These are automated code checks, not testing on additional TV models.
+Build validation for the Android release covered 325 passing JVM tests, 0 lint errors and 104 warnings. The [Windows installer source](windows-installer/) includes its build script and verification program.
 
 ## Upstream and licenses
 

@@ -4,13 +4,13 @@
 
 File: `TV-Home-Apple-Style.apk`.
 
-Requirements: Android TV / Google TV running Android 8.0 or later. The app appears as “Главный экран” (Home).
+Requires Android TV or Google TV running Android 8–14. The app appears as “Главный экран” (Home).
 
 1. Copy the APK to a USB drive and connect it to the TV.
 2. Open the APK using a file manager. If Android prompts you, allow that file manager to install unknown apps, then select Install.
 3. Open “Главный экран”. The four-column layout, input/VPN/network capsule, settings button and light settings menu are embedded. No separate theme file or Home shortcut APK is needed.
 4. Select this app as the default Home app in the TV’s settings, if that option is available. Names and locations vary by firmware.
-5. If the Home button still opens the original launcher, a model-specific setup may be needed. This APK does not disable system apps. Do not apply another TV’s cleanup or disable lists without checking the model.
+5. If Home still opens the stock launcher, connect the TV with the [Windows installer](../windows-installer/README.en.md) and choose **Выключить старый** (Turn off stock Home). Use **Включить старый** (Turn on stock Home) to restore it. The Windows installer includes ADB and works offline over the local network. Network debugging and Home control depend on the TV firmware.
 
 ## Language
 
