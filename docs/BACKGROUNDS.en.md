@@ -10,7 +10,33 @@ Implemented in version 3.4. Open **Settings → Background**. On enables the sel
 
 All 28 installed wallpaper files are 3840×2160 JPEG. These are high-quality upscales of the approved generated illustrations, not newly synthesized native-4K detail. The app samples them for the available viewport, preserving layout on 1080p and using the larger bitmap when Android exposes a 4K viewport.
 
-On the tested MiTV-MOEU1, Android reports a 3840×2160 panel but a 1920×1080 app viewport. Firmware resource `config_maxUiWidth=1920` was read directly; both resetting the size and requesting 3840×2160 kept 1080p. Native 4K UI was therefore not achieved on this firmware. A real 4K UI on another TV is not yet tested. Android applies this maximum in [DisplayContent](https://android.googlesource.com/platform/frameworks/base/+/e0f778e6a0d7/services/core/java/com/android/server/wm/DisplayContent.java). No root or firmware changes were used.
+On the tested MiTV-MOEU1, the panel runs at 3840×2160 with a 1920×1080 app viewport. `config_maxUiWidth` was 1920 in the original test and 3840 in the follow-up, while the effective viewport remained 1920×1080 with the system size override in place. Native 4K UI remains unverified on this TV. [How Android calculates the UI dimensions](https://android.googlesource.com/platform/frameworks/base/+/e0f778e6a0d7/services/core/java/com/android/server/wm/DisplayContent.java)
+
+## Xiaomi UI appears enlarged after a restart
+
+On a Xiaomi MiTV-MOEU1 (`lalaland`), the app viewport stayed at 1920×1080 after restart, but the UI density rose from 320 to 640 dpi. Restoring 320 dpi restored the original scale without changing either resolution. The model-specific steps below use ADB bundled with the Windows installer.
+
+1. Connect the TV in the installer. Open PowerShell. Replace the example address and port with the TV's own address and port.
+
+   ```powershell
+   $adb = Join-Path $env:LOCALAPPDATA 'TVHomeInstaller\adb-37.0.1\adb.exe'
+   $tv = '192.168.1.50:5555'
+   & $adb -s $tv shell getprop ro.product.model
+   & $adb -s $tv shell am get-current-user
+   & $adb -s $tv shell wm size
+   & $adb -s $tv shell wm density
+   ```
+
+2. Run the following commands only if the TV matches the observed case: `MiTV-MOEU1`, user `0`, physical size `3840x2160`, override size `1920x1080`, physical density `320` and override density `640`.
+
+   ```powershell
+   & $adb -s $tv shell wm density 320
+   & $adb -s $tv shell settings --user 0 put secure display_density_forced 320
+   & $adb -s $tv shell wm density
+   & $adb -s $tv shell settings --user 0 get secure display_density_forced
+   ```
+
+The scale updates immediately. The last command should return `320`. Both the live and stored values were verified. The stored value has yet to be tested on a subsequent restart. [How Android reads stored display density](https://android.googlesource.com/platform/frameworks/base/+/android-14.0.0_r1/services/core/java/com/android/server/wm/WindowManagerService.java)
 
 ## Actual TV captures
 

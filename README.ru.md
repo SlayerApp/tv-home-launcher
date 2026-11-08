@@ -8,8 +8,8 @@
 
 ## Скачать и установить
 
-- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-rounded) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
-- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108).
+- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
+- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
 - [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 
 Для Windows и флешки используется один APK. Если после установки с флешки Home открывает штатный экран, подключите ТВ в Windows-установщике и нажмите «Выключить старый». Кнопка «Включить старый» возвращает его. Переключение требует сетевой отладки и зависит от прошивки телевизора.
@@ -50,7 +50,7 @@ VPN-кнопка открывает отдельно установленный 
 
 [Галерея и управление фонами](docs/BACKGROUNDS.md): лес и озеро, горы, морской берег, райский пляж, Новый год, лесной Хэллоуин и «После звонка» с Джонни рядом с Марией. Функция включена в APK 3.4; выберите **Настройки → Фон**.
 
-Включение, тема и время суток сохраняются. Автоматический режим следует часам ТВ; Выкл. возвращает прежнее оформление. Все 28 файлов имеют размер 3840×2160 — это увеличенные согласованные иллюстрации. На проверенном Xiaomi прошивка ограничивает сам интерфейс до 1920×1080.
+Включение, тема и время суток сохраняются. Автоматический режим следует часам ТВ; Выкл. возвращает прежнее оформление. Все 28 файлов имеют размер 3840×2160 — это увеличенные согласованные иллюстрации. На проверенном Xiaomi интерфейс работал в 1920×1080 на панели 4К. [Масштаб на Xiaomi после перезагрузки](docs/BACKGROUNDS.md#масштаб-на-xiaomi-после-перезагрузки)
 
 **Райский пляж — снимок с ТВ**
 

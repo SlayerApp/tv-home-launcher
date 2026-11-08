@@ -18,7 +18,7 @@ Open **Settings → Language → Русский / English**. The choice updates 
 
 ## Backgrounds
 
-Open **Settings → Background**. Off restores the previous look. Seven themes include paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. All 28 images are 3840×2160 upscaled illustrations. Automatic follows the TV clock: morning 06–11, day 11–17, evening 17–22, night 22–06. Manual time selection is also available. Android determines UI resolution; the tested Xiaomi firmware limits menus to 1080p. The standby screensaver is preserved.
+Open **Settings → Background**. Off restores the previous look. Seven themes include paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. All 28 images are 3840×2160 upscaled illustrations. Automatic follows the TV clock: morning 06–11, day 11–17, evening 17–22, night 22–06. Manual time selection is also available. Android determines UI resolution. The tested Xiaomi reported a 1080p menu on its 4K panel. [Xiaomi UI scale after restart](BACKGROUNDS.en.md#xiaomi-ui-appears-enlarged-after-a-restart) The standby screensaver is preserved.
 
 ## Apps, inputs and VPN
 

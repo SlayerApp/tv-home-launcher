@@ -1,2 +1,2 @@
-e70dfb34f39078c8add925d64a332f94daa1f47d6103da48b1bf41ee335a4ca1  TV-Home-Installer.exe
-cda2d39c6654d9f10df44bf18dd089baf4683c48532010b4bb2162dcf471ec92  TV-Home-USB-Instruction.txt
+9ab9c9a8be5498e6e272a2153a521050b9025f44c8ae53ed8bc25b8602d36367  TV-Home-Installer.exe
+f3546585d717ce063ae2264e5033d27ded0319bea7fa080f5a67f42ffef3eaf0  TV-Home-USB-Instruction.txt

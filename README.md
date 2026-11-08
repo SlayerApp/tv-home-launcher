@@ -8,8 +8,8 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 
 ## Download and install
 
-- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-rounded) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
-- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108).
+- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
+- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
 Use the same APK for Windows and USB installation. If Home still opens the stock launcher after USB installation, connect the TV with the Windows installer and choose **Выключить старый** (Turn off stock Home). **Включить старый** (Turn on stock Home) restores it. These controls require network debugging and firmware support for changing Home.
@@ -54,7 +54,7 @@ Actual captures from the main 3.4 build on a Xiaomi MiTV-MOEU1. The portable bui
 
 [Gallery and background controls](docs/BACKGROUNDS.en.md): forest/lake, mountains, coast, paradise beach, New Year, Halloween forest and After the Bell with Johnny beside Maria. Implemented in APK 3.4; open **Settings → Background**.
 
-Enabled state, theme and time mode are saved. Automatic follows the TV clock; Off restores the previous appearance. All 28 files are 3840×2160 upscaled approved illustrations. The tested Xiaomi firmware limits the actual UI to 1920×1080.
+Enabled state, theme and time mode are saved. Automatic follows the TV clock; Off restores the previous appearance. All 28 files are 3840×2160 upscaled approved illustrations. The tested Xiaomi reported a 1920×1080 UI on its 4K panel. [Xiaomi UI scale after restart](docs/BACKGROUNDS.en.md#xiaomi-ui-appears-enlarged-after-a-restart)
 
 **Paradise beach — actual TV capture**
 

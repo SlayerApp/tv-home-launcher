@@ -10,7 +10,33 @@
 
 Все 28 установленных фоновых файлов — JPEG 3840×2160. Это качественное увеличение согласованных сгенерированных иллюстраций; новая детализация native 4К не синтезировалась. Лаунчер загружает размер под доступный экран: на 1080p — уменьшенный, при доступном Android-окне 4К — полный. Раскладка от размера файла не меняется.
 
-На проверенном MiTV-MOEU1 панель 3840×2160, но окно приложений 1920×1080. Прямое чтение ресурса прошивки показало `config_maxUiWidth=1920`; сброс и запрос 3840×2160 оставили 1080p. Настоящий 4К-интерфейс на этой прошивке включить не удалось. Реальный 4К-интерфейс на другом ТВ пока не испытан. Применение максимума в Android описано в [DisplayContent](https://android.googlesource.com/platform/frameworks/base/+/e0f778e6a0d7/services/core/java/com/android/server/wm/DisplayContent.java). Root и изменения прошивки не использовались.
+На проверенном MiTV-MOEU1 панель работает в 3840×2160, а окно приложений — в 1920×1080. При первой проверке `config_maxUiWidth` был равен 1920. При повторной проверке он показал 3840, а эффективный интерфейс оставался 1920×1080 с заданным системным размером. Работа интерфейса в 4К на этой модели пока не подтверждена. [Как Android рассчитывает размеры интерфейса](https://android.googlesource.com/platform/frameworks/base/+/e0f778e6a0d7/services/core/java/com/android/server/wm/DisplayContent.java)
+
+## Масштаб на Xiaomi после перезагрузки
+
+Этот случай проверен на Xiaomi MiTV-MOEU1 (`lalaland`). После перезагрузки панель осталась в 4К, а меню при 1920×1080 стало крупнее из-за плотности 640 dpi. Рабочий масштаб на проверенном ТВ — 320 dpi.
+
+1. Подключитесь кнопкой «Подключить» в Windows-установщике. Откройте PowerShell и впишите IP своего ТВ в примере. Если в установщике указан другой порт, замените и порт.
+
+   ```powershell
+   $adb = Join-Path $env:LOCALAPPDATA 'TVHomeInstaller\adb-37.0.1\adb.exe'
+   $tv = '192.168.1.50:5555'
+   & $adb -s $tv shell getprop ro.product.model
+   & $adb -s $tv shell am get-current-user
+   & $adb -s $tv shell wm size
+   & $adb -s $tv shell wm density
+   ```
+
+2. Выполните следующие команды, только если вывод совпал с проверенным случаем: модель `MiTV-MOEU1`, профиль `0`, физический размер `3840x2160`, заданный размер `1920x1080`, физическая плотность `320` и заданная `640`.
+
+   ```powershell
+   & $adb -s $tv shell wm density 320
+   & $adb -s $tv shell settings --user 0 put secure display_density_forced 320
+   & $adb -s $tv shell wm density
+   & $adb -s $tv shell settings --user 0 get secure display_density_forced
+   ```
+
+После команды масштаб меняется сразу. Последняя команда должна вывести `320`. На проверенном ТВ прочитано сохранённое значение. Повторная перезагрузка после записи пока не проверена. [Как Android читает сохранённую плотность](https://android.googlesource.com/platform/frameworks/base/+/android-14.0.0_r1/services/core/java/com/android/server/wm/WindowManagerService.java)
 
 ## Реальные снимки ТВ
 
