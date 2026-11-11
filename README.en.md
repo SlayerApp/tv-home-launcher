@@ -9,10 +9,11 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 ## Download and install
 
 - [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
+- The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.0) · [Mac setup guide](macos-installer/README.md)
 - [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
-Use the same APK for Windows and USB installation. If Home still opens the stock launcher after USB installation, connect the TV with the Windows installer and choose **Выключить старый** (Turn off stock Home). **Включить старый** (Turn on stock Home) restores it. These controls require network debugging and firmware support for changing Home.
+Both desktop installers and USB installation use the same APK. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
 
 Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bundled. The launcher does not automatically disable system apps.
 

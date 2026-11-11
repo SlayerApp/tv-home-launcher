@@ -9,10 +9,11 @@
 ## Скачать и установить
 
 - [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
+- В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.0) · [Инструкция для Mac](macos-installer/README.md)
 - [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
 - [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 
-Для Windows и флешки используется один APK. Если после установки с флешки Home открывает штатный экран, подключите ТВ в Windows-установщике и нажмите «Выключить старый». Кнопка «Включить старый» возвращает его. Переключение требует сетевой отладки и зависит от прошивки телевизора.
+Оба установщика и флешка используют один APK. Чтобы изменить действие кнопки Home после установки с флешки, подключите ТВ через установщик для Windows или Mac и воспользуйтесь кнопками управления штатным экраном. Переключение требует сетевой отладки и зависит от прошивки телевизора.
 
 Приложения, аккаунты, VPN-подписки и AirPlay-приёмник в APK не входят. Лаунчер не отключает системные приложения автоматически.
 
