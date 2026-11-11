@@ -1,0 +1,39 @@
+name: Build macOS installer
+
+on:
+  push:
+    branches: [macos-installer]
+    paths:
+      - '.github/workflows/macos-installer.yml'
+      - 'macos-installer/**'
+      - 'windows-installer/InstallerCore.cs'
+      - 'windows-installer/TV-Home-Installer.ico'
+      - 'downloads/TV-Home-Apple-Style.apk'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and launch the app
+        run: bash macos-installer/script/build_and_run.sh --verify
+      - name: Publish verified archive
+        if: github.ref == 'refs/heads/macos-installer'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create macos-installer-v1.0.0 \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "TV Home Installer for macOS 1.0.0" \
+            --notes "Universal app for macOS 15 or later. Includes ADB 37.0.1, launcher APK and USB guide. Ad hoc signed. A Mac build and startup check passed. Network installation on a physical TV or projector still needs verification." \
+            macos-installer/dist/TV-Home-Installer-macOS.zip \
+            macos-installer/dist/TV-Home-Installer-macOS.zip.sha256

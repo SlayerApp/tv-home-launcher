@@ -32,6 +32,12 @@ namespace TvHomeInstaller
 
         internal Tv Connect(string address)
         {
+            string transport;
+            return Connect(address, null, out transport);
+        }
+
+        internal Tv Connect(string address, string expectedTransport, out string transport)
+        {
             string endpoint = Endpoint(address);
             using (var client = new TcpClient())
             {
@@ -63,8 +69,11 @@ namespace TvHomeInstaller
             if (device.Groups[1].Value != "device" || !device.Groups[2].Success)
                 throw new InvalidOperationException("ADB не установил соединение. Проверьте порт отладки и версию Platform-Tools.");
             // A transport ID pins this operation to the same connection even if the IP is reused.
-            string transport = device.Groups[2].Value;
-            return new Tv((seconds, args) => Run(seconds * 1000, new[] { "-t", transport }.Concat(args).ToArray()));
+            string currentTransport = device.Groups[2].Value;
+            if (expectedTransport != null && currentTransport != expectedTransport)
+                throw new InvalidOperationException("Подключение к устройству изменилось. Подключитесь заново и проверьте модель.");
+            transport = currentTransport;
+            return new Tv((seconds, args) => Run(seconds * 1000, new[] { "-t", currentTransport }.Concat(args).ToArray()));
         }
 
         internal void Pair(string address, string code)
@@ -89,12 +98,18 @@ namespace TvHomeInstaller
 
         private string RunWithInput(int timeout, string input, string[] args)
         {
-            var start = new ProcessStartInfo(executable, string.Join(" ", args.Select(Quote)))
+            var start = new ProcessStartInfo(executable)
             {
                 UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true,
                 RedirectStandardError = true, RedirectStandardInput = input != null,
                 StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8
             };
+#if MACOS_INSTALLER
+            foreach (string arg in args) start.ArgumentList.Add(arg);
+            start.Environment["ADB_SERVER_SOCKET"] = "tcp:127.0.0.1:5041";
+#else
+            start.Arguments = string.Join(" ", args.Select(Quote));
+#endif
             using (var process = Process.Start(start))
             {
                 var output = process.StandardOutput.ReadToEndAsync();
@@ -117,11 +132,13 @@ namespace TvHomeInstaller
             }
         }
 
+#if !MACOS_INSTALLER
         private static string Quote(string value)
         {
             return "\"" + Regex.Replace(value, "(\\\\*)\"|(\\\\+)$", m =>
                 m.Groups[1].Success ? new string('\\', m.Groups[1].Length * 2 + 1) + "\"" : m.Value + m.Value) + "\"";
         }
+#endif
     }
 
     internal sealed class Tv
