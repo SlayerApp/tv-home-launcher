@@ -25,7 +25,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Build and launch the app
-        run: bash macos-installer/script/build_and_run.sh --verify
+        run: |
+          bash macos-installer/script/build_and_run.sh --verify
+          test -s macos-installer/dist/TV-Home-Installer-macOS.zip
+          test -s macos-installer/dist/TV-Home-Installer-macOS.zip.sha256
       - name: Publish verified archive
         if: github.ref == 'refs/heads/macos-installer'
         env:

@@ -99,9 +99,13 @@ codesign --force --sign - "$contents/Helpers/adb"
 codesign --force --sign - "$staged"
 codesign --verify --deep --strict --verbose=2 "$staged"
 
+ditto "$staged" "$app"
+codesign --verify --deep --strict "$app"
+
 if [[ "$mode" == --verify ]]; then
-  open -n "$staged" --args --verify-bundle "$tmp/verified"
-  for ((i=0; i<30 && ! -f "$tmp/verified"; i++)); do
+  open -n "$app" --args --verify-bundle "$tmp/verified"
+  for ((i=0; i<30; i++)); do
+    [[ ! -f "$tmp/verified" ]] || break
     sleep 1
   done
   if [[ ! -f "$tmp/verified" || "$(cat "$tmp/verified")" != OK ]]; then
@@ -109,10 +113,9 @@ if [[ "$mode" == --verify ]]; then
     [[ ! -f "$tmp/verified" ]] || cat "$tmp/verified" >&2
     exit 1
   fi
+  echo "macOS app launched and verified its embedded ADB, APK and USB guide."
 fi
 
-ditto "$staged" "$app"
-codesign --verify --deep --strict "$app"
 zip="$out/TV-Home-Installer-macOS.zip"
 ditto -c -k --keepParent "$app" "$tmp/TV-Home-Installer-macOS.zip"
 mv -f "$tmp/TV-Home-Installer-macOS.zip" "$zip"
