@@ -36,7 +36,7 @@ echo "ee39ad5967e95c2a07f04dbcbde96b1a0c916ba376096db5d2f498b7727a5d1d  $archive
 unzip -p "$archive" platform-tools/adb > "$contents/Helpers/adb"
 chmod 755 "$contents/Helpers/adb"
 unzip -p "$archive" platform-tools/NOTICE.txt > "$contents/Resources/ADB-NOTICE.txt"
-xcrun lipo -verify_arch arm64 x86_64 "$contents/Helpers/adb"
+xcrun lipo "$contents/Helpers/adb" -verify_arch arm64 x86_64
 
 apk="$repo/downloads/TV-Home-Apple-Style.apk"
 if [[ ! -f "$apk" ]]; then
@@ -94,7 +94,7 @@ for arch in arm64 x86_64; do
     "$project/InstallerApp.swift" -o "$tmp/installer-$arch"
 done
 xcrun lipo -create "$tmp/installer-arm64" "$tmp/installer-x86_64" -output "$contents/MacOS/TVHomeInstaller"
-xcrun lipo -verify_arch arm64 x86_64 "$contents/MacOS/TVHomeInstaller"
+xcrun lipo "$contents/MacOS/TVHomeInstaller" -verify_arch arm64 x86_64
 codesign --force --sign - "$contents/Helpers/adb"
 codesign --force --sign - "$staged"
 codesign --verify --deep --strict --verbose=2 "$staged"
