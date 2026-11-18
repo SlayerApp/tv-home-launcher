@@ -46,6 +46,12 @@ namespace TvHomeInstaller
                 "discover disabled Android 8 Home from its declared MAIN/HOME filter only");
             older.Switch(TestTv.Factory, true, Ignore);
             Check(oreo.Home == TestTv.FactoryHome && oreo.Stock == 0, "restore Android 8 Home");
+            foreach (string package in new[] { VpnPackage.PlayPackage, VpnPackage.DirectPackage })
+            {
+                var existing = new TestTv { Vpn = package };
+                new Tv(existing.Run).Install("Launcher.apk", null, Ignore, true);
+                Check(existing.Writes.Count(entry => entry == "install") == 1, "keep existing VPN package " + package);
+            }
             Console.WriteLine("PASS simulated install, both switches, rollback, model guard and Android 8 recovery");
 
             var platformFolder = Environment.GetEnvironmentVariable("TV_INSTALLER_TEST_PLATFORM_FOLDER");
@@ -70,7 +76,8 @@ namespace TvHomeInstaller
             using (var ui = new System.Windows.Forms.Timer { Interval = 100 })
             {
                 var controls = Descendants(form).ToList();
-                Check(controls.OfType<CheckBox>().Single().Checked, "disable default checked");
+                Check(controls.OfType<CheckBox>().Single(x => x.Text.StartsWith("После установки")).Checked, "disable default checked");
+                Check(controls.OfType<CheckBox>().Single(x => x.Text.StartsWith("Добавить VPN")).Checked, "VPN default checked");
                 var connect = controls.OfType<Button>().Single(x => x.Text == "Подключить");
                 var restore = controls.OfType<Button>().Single(x => x.Text == "Переключить старый");
                 var watch = Stopwatch.StartNew();
@@ -202,6 +209,7 @@ namespace TvHomeInstaller
             internal bool FailNewHome;
             internal bool Multiple;
             internal bool Oreo;
+            internal string Vpn;
             internal readonly List<string> Writes = new List<string>();
 
             internal string Run(int seconds, string[] args)
@@ -215,6 +223,7 @@ namespace TvHomeInstaller
                     case "getprop ro.build.version.sdk": return Oreo ? "26" : "30";
                     case "am get-current-user": return "0";
                     case "pm list features": return "feature:android.software.leanback";
+                    case "pm list packages --user 0": return "package:" + Factory + "\npackage:" + Vpn;
                     case "pm list packages -s --user 0": return "package:" + Factory + "\npackage:com.vendor.second\npackage:com.android.tv.settings\npackage:com.vendor.setup\npackage:com.vendor.control";
                     case "cmd package resolve-activity --brief --user 0 -a android.settings.SETTINGS": return "com.vendor.control/.Control";
                     case "dumpsys package " + Factory: return "    User 0: installed=true hidden=false enabled=" + Stock;

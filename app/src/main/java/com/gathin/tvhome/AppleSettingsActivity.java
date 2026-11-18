@@ -30,7 +30,7 @@ public final class AppleSettingsActivity extends AppleUi {
         row(getString(R.string.apple_weather), getString(R.string.apple_automatic) + "  ›", () -> WeatherWidget.settings(this));
         section(getString(R.string.apple_connections));
         row(getString(R.string.apple_network), "Wi-Fi / Ethernet  ›", () -> openAction(Settings.ACTION_WIFI_SETTINGS));
-        row("VPN", "Happ  ›", () -> openPackage("com.happproxy"));
+        row(getString(R.string.vpn), "›", () -> VpnClient.open(this));
         row("AirPlay", "›", () -> openPackage("io.github.jqssun.airplay"));
         row(getString(R.string.apple_bluetooth), "›", () -> TvSettingsRoutes.bluetooth(this));
         row(getString(R.string.apple_inputs), getString(R.string.apple_hdmi_tv) + "  ›", () -> open(new Intent("com.android.tv.action.VIEW_INPUTS")

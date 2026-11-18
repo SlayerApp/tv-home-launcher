@@ -28,6 +28,8 @@ The TV tile opens the built-in tuner. If no tuner is available, the launcher tri
 
 Hold OK on the TV tile and choose **Remove from Home** to hide it. To bring it back, open **Settings → Show apps** and enable **TV tile**.
 
+Both desktop installers can install the official ARM VPN client if missing. Select **Добавить VPN** (Add VPN) to include the client's APK when saving files to USB. The installer needs internet access for the first download. Open **VPN** on the TV to import your profile or subscription. [Client setup on Android TV](https://www.happ.su/main/faq/android-tv)
+
 “HDMI names” lets you label any physical HDMI port or remove its label. Default labels use HDMI numbers, without a preassigned Apple TV name. These names are saved in the launcher and do not overwrite the TV’s system labels.
 
 ## Weather

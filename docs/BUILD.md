@@ -21,7 +21,7 @@ chmod +x gradlew
 
 Результат: `app/build/outputs/apk/release/app-release.apk`.
 
-Параметры переносной сборки `com.gathin.tvhome` версии `3.7-portable7` включают versionCode 20, minSdk 26 и targetSdk 34.
+Параметры переносной сборки `com.gathin.tvhome` версии `3.7.1-portable8` включают versionCode 22, minSdk 26 и targetSdk 34.
 
 ## Подпись и обновления
 

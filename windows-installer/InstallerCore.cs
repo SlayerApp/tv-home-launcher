@@ -294,7 +294,7 @@ namespace TvHomeInstaller
             return home == null || PackageOf(home) == "android" ? null : PackageOf(home);
         }
 
-        internal void Install(string file, string stockToDisable, Action<string> progress)
+        internal void Install(string file, string stockToDisable, Action<string> progress, bool installVpn = false)
         {
             if (stockToDisable != null) RequireStock(stockToDisable);
             RequireActiveProfile();
@@ -311,6 +311,36 @@ namespace TvHomeInstaller
             {
                 throw new InvalidOperationException("APK установлен, но настройка Home не завершена. " + ex.Message, ex);
             }
+            if (installVpn)
+            {
+                try { InstallVpnIfMissing(progress); }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Лаунчер установлен. VPN пока недоступен. " + ex.Message, ex);
+                }
+            }
+        }
+
+        private void InstallVpnIfMissing(Action<string> progress)
+        {
+            RequireActiveProfile();
+            string[] installed = Lines(Shell("pm", "list", "packages", "--user", user));
+            if (installed.Contains("package:" + VpnPackage.PlayPackage) ||
+                installed.Contains("package:" + VpnPackage.DirectPackage))
+            {
+                progress("VPN уже установлен на устройстве.");
+                return;
+            }
+            string[] architectures = Shell("getprop", "ro.product.cpu.abilist").Split(',');
+            if (!architectures.Contains("arm64-v8a") && !architectures.Contains("armeabi-v7a"))
+                throw new InvalidOperationException("Официальный APK клиента рассчитан на ARM. Проверьте доступность VPN в Google Play на устройстве.");
+
+            string apk = VpnPackage.Prepare(progress);
+            RequireActiveProfile();
+            progress("Устанавливаю VPN-клиент…");
+            string result = run(180, new[] { "install", "--user", user, apk });
+            if (!Lines(result).Contains("Success")) throw new InvalidOperationException(result);
+            progress("VPN установлен. Откройте кнопку VPN на ТВ и добавьте профиль.");
         }
 
         internal void VerifyNewHome()

@@ -4,16 +4,18 @@
 
 Лёгкий главный экран для Android TV / Google TV с оформлением в стиле Apple TV.
 
-**Переносная сборка 3.7-portable7.** Для Android TV и Google TV с Android 8–14.
+**Переносная сборка 3.7.1-portable8.** Для Android TV и Google TV с Android 8–14.
 
 ## Скачать и установить
 
-- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
-- В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.1) · [Инструкция для Mac](macos-installer/README.md)
-- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7).
+- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7.1) — установка по локальной сети и переключение штатного главного экрана. ADB и APK лаунчера входят в EXE.
+- В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.2) · [Инструкция для Mac](macos-installer/README.md)
+- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7.1) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
 - [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 
 Оба установщика и флешка используют один APK. Чтобы изменить действие кнопки Home после установки с флешки, подключите ТВ через установщик для Windows или Mac и воспользуйтесь кнопками управления штатным экраном. Переключение требует сетевой отладки и зависит от прошивки телевизора.
+
+Флажок «Добавить VPN» устанавливает официальный клиент для ARM при его отсутствии или сохраняет его APK на флешку. Для первой загрузки нужен интернет. На телевизоре откройте VPN и импортируйте свой профиль. [Настройка клиента на Android TV](https://www.happ.su/main/ru/faq/android-tv)
 
 Приложения, аккаунты, VPN-подписки и AirPlay-приёмник в APK не входят. Лаунчер не отключает системные приложения автоматически.
 

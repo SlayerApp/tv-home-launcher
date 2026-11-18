@@ -864,14 +864,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         compactVpn.setPadding(Math.round(3 * density), 0, Math.round(3 * density), 0);
         compactVpn.setIncludeFontPadding(false);
         compactVpn.setGravity(Gravity.CENTER);
-        compactVpn.setContentDescription("VPN — Happ");
+        compactVpn.setContentDescription(getString(R.string.vpn));
         compactVpn.setCompoundDrawablesRelative(null, null, null, null);
-        compactVpn.setOnClickListener(v -> {
-            Intent vpn = getPackageManager().getLeanbackLaunchIntentForPackage("com.happproxy");
-            if (vpn == null) vpn = getPackageManager().getLaunchIntentForPackage("com.happproxy");
-            if (vpn != null) open(vpn);
-            else Toast.makeText(this, R.string.apple_install_happ, Toast.LENGTH_SHORT).show();
-        });
+        compactVpn.setOnClickListener(v -> VpnClient.open(this));
         ViewGroup compactBar = findViewById(R.id.topButtons);
         LinearLayout controlsCapsule = new LinearLayout(this);
         controlsCapsule.setOrientation(LinearLayout.HORIZONTAL);

@@ -105,6 +105,7 @@ final class InstallerModel: ObservableObject {
     @Published var device: ConnectedTV?
     @Published var selection = ""
     @Published var disableAfterInstall = false
+    @Published var includeVpn = true
     @Published var busy = false
     @Published var status = "Подключите Mac и Android TV к одной сети."
 
@@ -119,7 +120,7 @@ final class InstallerModel: ObservableObject {
         guard let device else { return }
         do {
             let apk = try InstallerFiles.resource(InstallerFiles.apk)
-            perform(["install", address, device.transport, apk.path, disableAfterInstall ? selection : ""],
+            perform(["install", address, device.transport, apk.path, disableAfterInstall ? selection : "", includeVpn ? "vpn" : "launcher"],
                     pending: "Передаю APK и проверяю запуск…", finished: "Установка завершена.")
         } catch {
             status = error.localizedDescription
@@ -158,12 +159,17 @@ final class InstallerModel: ObservableObject {
                     .write(to: folder.appendingPathComponent(name), options: .atomic)
             }
             status = "APK и инструкция сохранены в папку «\(folder.lastPathComponent)»."
+            if includeVpn {
+                perform(["copy-vpn", folder.path], pending: status + " Подготавливаю VPN…",
+                        finished: "APK лаунчера, APK для VPN и инструкция сохранены.", disconnectOnError: false)
+            }
         } catch {
             status = error.localizedDescription
         }
     }
 
-    private func perform(_ arguments: [String], pairingCode: String? = nil, pending: String, finished: String) {
+    private func perform(_ arguments: [String], pairingCode: String? = nil, pending: String, finished: String,
+                         disconnectOnError: Bool = true) {
         guard !busy else { return }
         busy = true
         status = pending
@@ -181,14 +187,16 @@ final class InstallerModel: ObservableObject {
                         selection = current.suggested ?? ""
                     }
                     device = current
-                } else if !reply.ok {
+                } else if !reply.ok && disconnectOnError {
                     device = nil
                     selection = ""
                 }
             } catch {
                 status = error.localizedDescription
-                device = nil
-                selection = ""
+                if disconnectOnError {
+                    device = nil
+                    selection = ""
+                }
             }
         }
     }
@@ -246,6 +254,8 @@ struct InstallerView: View {
             .disabled(model.busy)
             Toggle("После установки выключить штатный экран", isOn: $model.disableAfterInstall)
                 .disabled(model.busy || model.device == nil)
+            Toggle("Добавить VPN (первая загрузка из интернета)", isOn: $model.includeVpn)
+                .disabled(model.busy)
             HStack(spacing: 12) {
                 Button("Установить лаунчер", action: model.install)
                     .buttonStyle(.borderedProminent)

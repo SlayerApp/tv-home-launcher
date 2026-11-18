@@ -21,7 +21,7 @@ chmod +x gradlew
 
 Output: `app/build/outputs/apk/release/app-release.apk`.
 
-The portable build `com.gathin.tvhome` version `3.7-portable7` uses versionCode 20, minSdk 26 and targetSdk 34.
+The portable build `com.gathin.tvhome` version `3.7.1-portable8` uses versionCode 22, minSdk 26 and targetSdk 34.
 
 ## Signing and updates
 

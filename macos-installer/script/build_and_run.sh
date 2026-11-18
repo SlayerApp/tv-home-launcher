@@ -42,7 +42,7 @@ apk="$repo/downloads/TV-Home-Apple-Style.apk"
 if [[ ! -f "$apk" ]]; then
   apk="$repo/export/TV-Home-Apple-Style.apk"
 fi
-echo "3487f7b3f7580d6212d5d7f79cb4db0386a9e3725a03828867a9abebdd7a8ccc  $apk" | shasum -a 256 --check
+echo "bcea977df6e90fa581da3f59a862d6ea03c88bb1e89a0d4d05100fb53c182121  $apk" | shasum -a 256 --check
 cp "$apk" "$contents/Resources/"
 cp "$project/TV-Home-USB-Instruction.txt" "$contents/Resources/"
 cp "$project/Info.plist" "$contents/"

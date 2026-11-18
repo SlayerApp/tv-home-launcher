@@ -7,6 +7,7 @@ on:
       - '.github/workflows/macos-installer.yml'
       - 'macos-installer/**'
       - 'windows-installer/InstallerCore.cs'
+      - 'windows-installer/VpnPackage.cs'
       - 'windows-installer/TV-Home-Installer.ico'
       - 'downloads/TV-Home-Apple-Style.apk'
   workflow_dispatch:
@@ -29,14 +30,20 @@ jobs:
           bash macos-installer/script/build_and_run.sh --verify
           test -s macos-installer/dist/TV-Home-Installer-macOS.zip
           test -s macos-installer/dist/TV-Home-Installer-macOS.zip.sha256
+      - name: Test the official VPN APK download
+        run: |
+          helpers="macos-installer/dist/TV Home Installer.app/Contents/Helpers"
+          usb="$(mktemp -d)"
+          "$helpers/TVHomeBackend-arm64" "$helpers/adb" copy-vpn "$usb"
+          echo "169f39f9d79ab4d6343588c3ed107e9113f1ecaf793e9ecd06a4fe7e6cc6e7b5  $usb/Happ.apk" | shasum -a 256 --check
       - name: Publish verified archive
         if: github.ref == 'refs/heads/macos-installer'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create macos-installer-v1.0.1 \
+          gh release create macos-installer-v1.0.2 \
             --target "$GITHUB_SHA" --prerelease \
-            --title "TV Home Installer for macOS 1.0.1" \
-            --notes "Fixes the local ADB server startup and shows the actual TV address after connection. Includes ADB 37.0.1, the 3.7 launcher APK with a hideable TV tile and a USB guide. Universal app for macOS 15 or later. Ad hoc signed." \
+            --title "TV Home Installer for macOS 1.0.2" \
+            --notes "Installs a verified VPN client from its official release when selected. Includes the 3.7.1 launcher APK, a hideable TV tile and ADB 37.0.1 with corrected local startup. Universal app for macOS 15 or later. Ad hoc signed." \
             macos-installer/dist/TV-Home-Installer-macOS.zip \
             macos-installer/dist/TV-Home-Installer-macOS.zip.sha256

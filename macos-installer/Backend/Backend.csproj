@@ -8,5 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../windows-installer/InstallerCore.cs" Link="InstallerCore.cs" />
+    <Compile Include="../../windows-installer/VpnPackage.cs" Link="VpnPackage.cs" />
   </ItemGroup>
 </Project>

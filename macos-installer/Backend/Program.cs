@@ -31,15 +31,20 @@ internal static class Program
             }
             if (operation == "endpoint" && args.Length == 3)
                 return Reply(new { ok = true, endpoint = Adb.Endpoint(address) }, 0);
+            if (operation == "copy-vpn" && args.Length == 3)
+            {
+                VpnPackage.CopyToUsb(address, log.Add);
+                return Reply(new { ok = true, log }, 0);
+            }
 
             if (!(operation == "connect" && args.Length == 3 ||
-                  operation == "install" && args.Length == 6 ||
+                  operation == "install" && args.Length == 7 && (args[6] == "vpn" || args[6] == "launcher") ||
                   operation == "switch" && args.Length == 6))
                 throw new ArgumentException("Неподдерживаемая операция.");
 
             var tv = adb.Connect(address, args.Length == 3 ? null : args[3], out string transport);
             if (operation == "install")
-                tv.Install(args[4], args[5] == "" ? null : args[5], log.Add);
+                tv.Install(args[4], args[5] == "" ? null : args[5], log.Add, args[6] == "vpn");
             if (operation == "switch")
             {
                 if (args[5] != "on" && args[5] != "off")

@@ -4,16 +4,18 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build 3.7-portable7.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
+**Portable build 3.7.1-portable8.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
-- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
-- The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.1) · [Mac setup guide](macos-installer/README.md)
-- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7).
+- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7.1) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the launcher APK.
+- The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.2) · [Mac setup guide](macos-installer/README.md)
+- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7.1) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
 Both desktop installers and USB installation use the same APK. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
+
+The **Add VPN** option installs the official ARM client when needed or saves it alongside the launcher for USB installation. The first download needs internet access. Open **VPN** on the TV to import your own profile. [Client setup on Android TV](https://www.happ.su/main/faq/android-tv)
 
 Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bundled. The launcher does not automatically disable system apps.
 

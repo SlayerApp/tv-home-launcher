@@ -44,6 +44,7 @@ namespace TvHomeInstaller
         private readonly Button pair = MakeButton("Сопряжение…", false);
         private readonly ComboBox stock = new ComboBox();
         private readonly CheckBox disable = new CheckBox();
+        private readonly CheckBox vpn = new CheckBox();
         private readonly Label device = MakeLabel("ТВ ещё не подключён", 11, true);
         private readonly Label detail = MakeLabel("Включите сетевую отладку на ТВ и введите его IPv4-адрес.", 10, false);
         private readonly TextBox status = new TextBox();
@@ -61,16 +62,16 @@ namespace TvHomeInstaller
             using (var artwork = typeof(InstallerWindow).Assembly.GetManifestResourceStream("installer.ico"))
                 Icon = new Icon(artwork, 64, 64);
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(710, 598);
-            MinimumSize = new Size(650, 604);
+            ClientSize = new Size(710, 630);
+            MinimumSize = new Size(650, 636);
             AutoScaleMode = AutoScaleMode.Dpi;
             Font = new Font("Segoe UI", 10);
             ForeColor = Ink;
             BackColor = Color.FromArgb(241, 245, 251);
 
-            var body = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(26, 20, 26, 15), ColumnCount = 1, RowCount = 10 };
+            var body = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(26, 20, 26, 15), ColumnCount = 1, RowCount = 11 };
             body.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            foreach (int height in new[] { 37, 30, 25, 40, 109, 36, 48 })
+            foreach (int height in new[] { 37, 30, 25, 40, 109, 30, 32, 48 })
                 body.RowStyles.Add(new RowStyle(SizeType.Absolute, height));
             body.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             body.RowStyles.Add(new RowStyle(SizeType.Absolute, 17));
@@ -89,7 +90,7 @@ namespace TvHomeInstaller
             heading.Controls.Add(emblem, 0, 0);
             heading.SetRowSpan(emblem, 2);
             heading.Controls.Add(MakeLabel("TV Home Installer", 22, true), 1, 0);
-            heading.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.7", 10, false), 1, 1);
+            heading.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.7.1", 10, false), 1, 1);
             body.Controls.Add(heading, 0, 0);
             body.SetRowSpan(heading, 2);
             var connectionHeading = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Margin = new Padding(0) };
@@ -132,6 +133,11 @@ namespace TvHomeInstaller
             disable.Dock = DockStyle.Fill;
             disable.Margin = new Padding(1, 0, 0, 0);
             body.Controls.Add(disable, 0, 5);
+            vpn.Text = "Добавить VPN (первая загрузка из интернета)";
+            vpn.Checked = true;
+            vpn.Dock = DockStyle.Fill;
+            vpn.Margin = new Padding(1, 0, 0, 0);
+            body.Controls.Add(vpn, 0, 6);
 
             var actions = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Margin = new Padding(0, 0, 0, 5) };
             actions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
@@ -140,7 +146,7 @@ namespace TvHomeInstaller
             toggle.Margin = new Padding(5, 0, 0, 0);
             actions.Controls.Add(install, 0, 0);
             actions.Controls.Add(toggle, 1, 0);
-            body.Controls.Add(actions, 0, 6);
+            body.Controls.Add(actions, 0, 7);
 
             status.Multiline = true;
             status.ReadOnly = true;
@@ -152,10 +158,10 @@ namespace TvHomeInstaller
             status.AccessibleName = "Состояние установки";
             status.Text = "Введите IP, например 192.168.1.50. Порт по умолчанию — 5555." + Environment.NewLine +
                 "Если APK уже установлен с флешки, подключитесь и нажмите «Выключить старый».";
-            body.Controls.Add(status, 0, 7);
+            body.Controls.Add(status, 0, 8);
             progressBar.Dock = DockStyle.Fill;
             progressBar.Margin = new Padding(0, 2, 0, 5);
-            body.Controls.Add(progressBar, 0, 8);
+            body.Controls.Add(progressBar, 0, 9);
 
             var footer = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 3, Margin = new Padding(0, 5, 0, 0) };
             for (int i = 0; i < 3; i++) footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 3));
@@ -164,14 +170,14 @@ namespace TvHomeInstaller
             footer.Controls.Add(usb, 0, 0);
             footer.Controls.Add(guide, 1, 0);
             footer.Controls.Add(pair, 2, 0);
-            body.Controls.Add(footer, 0, 9);
+            body.Controls.Add(footer, 0, 10);
 
             connect.Click += async (sender, args) => await Run(null, false);
             install.Click += async (sender, args) => await Run(null, true);
             toggle.Click += async (sender, args) => await Run(!stockEnabled, false);
             address.TextChanged += (sender, args) => { ResetDevice(); UpdateControls(); };
             stock.SelectedIndexChanged += (sender, args) => UpdateStock();
-            usb.Click += (sender, args) => SaveApk();
+            usb.Click += async (sender, args) => await SaveApk();
             guide.Click += (sender, args) => ShowGuide();
             pair.Click += async (sender, args) => await Pair();
             FormClosing += (sender, args) => { if (busy) args.Cancel = true; };
@@ -212,6 +218,7 @@ namespace TvHomeInstaller
             address.Enabled = !busy;
             connect.Enabled = install.Enabled = !busy && hasAddress;
             disable.Enabled = !busy && (!connected || switchAvailable);
+            vpn.Enabled = !busy;
             stock.Enabled = !busy && stock.Items.Count > 0;
             toggle.Enabled = !busy && switchAvailable;
             toggle.Text = !switchAvailable ? "Переключить старый" : stockEnabled ? "Выключить старый" : "Включить старый";
@@ -230,7 +237,7 @@ namespace TvHomeInstaller
             UpdateControls();
         }
 
-        private void SaveApk()
+        private async Task SaveApk()
         {
             using (var dialog = new SaveFileDialog { Filter = "Android APK|*.apk", FileName = Payload.ApkName, Title = "Сохранить APK и инструкцию на флешку" })
             {
@@ -238,6 +245,11 @@ namespace TvHomeInstaller
                 if (!string.Equals(Path.GetExtension(dialog.FileName), ".apk", StringComparison.OrdinalIgnoreCase))
                 {
                     Append("Выберите имя файла с расширением .apk.");
+                    return;
+                }
+                if (vpn.Checked && string.Equals(Path.GetFileName(dialog.FileName), VpnPackage.ApkName, StringComparison.OrdinalIgnoreCase))
+                {
+                    Append("Для лаунчера выберите имя " + Payload.ApkName + ".");
                     return;
                 }
                 try
@@ -257,6 +269,20 @@ namespace TvHomeInstaller
                     }
                 }
                 catch (Exception ex) { Append("APK сохранён. Запись инструкции не удалась. " + ex.Message); }
+                if (vpn.Checked)
+                {
+                    string folder = Path.GetDirectoryName(dialog.FileName);
+                    IProgress<string> progress = new Progress<string>(Append);
+                    busy = true;
+                    UpdateControls();
+                    try
+                    {
+                        await Task.Run(() => VpnPackage.CopyToUsb(folder, progress.Report));
+                        Append("APK для VPN сохранён как " + VpnPackage.ApkName + ".");
+                    }
+                    catch (Exception ex) { Append("Подготовить APK для VPN не удалось. " + ex.Message); }
+                    finally { busy = false; UpdateControls(); }
+                }
             }
         }
 
@@ -333,6 +359,7 @@ namespace TvHomeInstaller
             try { endpoint = Adb.Endpoint(address.Text); }
             catch (Exception ex) { Append(ex.Message); return; }
             bool disableAfterInstall = disable.Checked;
+            bool includeVpn = vpn.Checked;
             string selectedStock = stock.SelectedItem as string;
             busy = true;
             status.Clear();
@@ -355,7 +382,7 @@ namespace TvHomeInstaller
                             string candidate = disableAfterInstall ? selectedStock ?? tv.SuggestedStock : null;
                             if (disableAfterInstall && candidate == null)
                                 messages.Report("Чтобы отключить старый экран, выберите его в списке после установки.");
-                            tv.Install(temporary, candidate, messages.Report);
+                            tv.Install(temporary, candidate, messages.Report, includeVpn);
                         }
                         finally { try { File.Delete(temporary); } catch (IOException) { } catch (UnauthorizedAccessException) { } }
                     }

@@ -10,8 +10,8 @@ $portable = Join-Path $root 'export\TV-Home-Apple-Style.apk'
 if (-not (Test-Path -LiteralPath $portable -PathType Leaf)) {
     $portable = Join-Path $root 'downloads\TV-Home-Apple-Style.apk'
 }
-if ((Get-FileHash -LiteralPath $portable).Hash -ne '3487F7B3F7580D6212D5D7F79CB4DB0386A9E3725A03828867A9ABEBDD7A8CCC') {
-    throw "APK 3.7 checksum mismatch: $portable"
+if ((Get-FileHash -LiteralPath $portable).Hash -ne 'BCEA977DF6E90FA581DA3F59A862D6EA03C88BB1E89A0D4D05100FB53C182121') {
+    throw "APK 3.7.1 checksum mismatch: $portable"
 }
 $adbBundle = Join-Path $PSScriptRoot 'vendor\adb-windows-37.0.1.zip'
 if ((Get-FileHash -LiteralPath $adbBundle).Hash -ne '270E6BC5473F30B0760224FB429936A876E04DC8E2C5E3BC3489020BADA6D7C0') {
@@ -26,9 +26,10 @@ $icon = Join-Path $PSScriptRoot 'TV-Home-Installer.ico'
 $guideText = [IO.File]::ReadAllText((Join-Path $PSScriptRoot $guideName)) -replace '\r?\n', "`r`n"
 [IO.File]::WriteAllText($guide, $guideText, [Text.UTF8Encoding]::new($true))
 & $compiler /nologo /target:winexe /platform:anycpu /optimize+ /codepage:65001 `
-    /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.IO.Compression.dll "/out:$output" `
+    /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.IO.Compression.dll /reference:System.Net.Http.dll "/out:$output" `
     "/win32icon:$icon" "/resource:$icon,installer.ico" `
     "/resource:$portable,launcher.apk" "/resource:$guide,usb-guide.txt" "/resource:$adbBundle,adb-windows.zip" `
-    (Join-Path $PSScriptRoot 'InstallerCore.cs') (Join-Path $PSScriptRoot 'AdbTools.cs') (Join-Path $PSScriptRoot 'InstallerWindow.cs')
+    (Join-Path $PSScriptRoot 'InstallerCore.cs') (Join-Path $PSScriptRoot 'AdbTools.cs') `
+    (Join-Path $PSScriptRoot 'VpnPackage.cs') (Join-Path $PSScriptRoot 'InstallerWindow.cs')
 if ($LASTEXITCODE -ne 0) { throw 'Windows installer compilation failed.' }
 Get-Item -LiteralPath $output | Select-Object FullName, Length
