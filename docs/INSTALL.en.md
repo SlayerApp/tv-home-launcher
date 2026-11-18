@@ -52,4 +52,4 @@ The portable 3.6 APK was installed and tested on a KIVI 4K Android TV (bangbae),
 
 Based on Gathin23/cleanyourtv under the MIT license. The original copyright notice and font license are included in the APK assets.
 
-TV and Home can be moved using Hold OK / Menu → Move. These utility tiles cannot be removed through the launcher. For the tested KIVI, see the [original Home recovery guide](RESTORE_KIVI.en.md).
+Move the TV or Home tile by holding OK and choosing **Move**. Use the recovery guide to restore the stock launcher on the tested KIVI model. [Original Home recovery guide](RESTORE_KIVI.en.md)

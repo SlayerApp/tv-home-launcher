@@ -32,4 +32,5 @@
 
 Основа: Gathin23/cleanyourtv, MIT License. Уведомление об авторских правах и лицензия шрифта находятся внутри APK в assets.
 
-ТВ и домик можно перемещать: удержание OK / Menu → Переместить. Убрать эти служебные плитки через меню лаунчера нельзя. Для проверенного KIVI инструкция возврата штатного Home: https://github.com/SlayerApp/tv-home-launcher/blob/main/docs/RESTORE_KIVI.md
+Чтобы переместить «ТВ» или «Домик», удерживайте OK и выберите «Переместить». Инструкция по восстановлению штатного Home для проверенного KIVI доступна на GitHub.
+https://github.com/SlayerApp/tv-home-launcher/blob/main/docs/RESTORE_KIVI.md

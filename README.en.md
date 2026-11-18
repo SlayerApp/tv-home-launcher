@@ -31,7 +31,7 @@ Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bund
 - Weather with approximate city detection and automatic text sizing for longer city names.
 - A restart shortcut that navigates to the native settings menu. The user confirms the actual restart.
 
-The VPN button opens Happ, which must be installed separately. The TV’s original screensaver and its timers are not changed automatically.
+The VPN button opens the client or its Google Play page. The TV uses its original screensaver and standby timers.
 
 ## Screenshots
 
