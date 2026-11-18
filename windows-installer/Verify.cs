@@ -67,7 +67,11 @@ namespace TvHomeInstaller
             VerifyResource(assembly, "launcher.apk", args[1]);
             VerifyResource(assembly, "installer.ico", Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                 @"..\windows-installer\TV-Home-Installer.ico"));
-            Check(assembly.GetManifestResourceNames().Count(x => x.EndsWith(".apk")) == 1, "single universal APK");
+            string vpnApk = Environment.GetEnvironmentVariable("TV_INSTALLER_TEST_VPN_APK");
+            bool offlineVpn = !string.IsNullOrEmpty(vpnApk);
+            Check(assembly.GetManifestResourceNames().Count(x => x.EndsWith(".apk")) == (offlineVpn ? 2 : 1),
+                "one universal launcher APK and the requested VPN payload");
+            if (offlineVpn) VerifyEmbeddedVpn(assembly, vpnApk);
             string guidePath = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[0])), "TV-Home-USB-Instruction.txt");
             VerifyResource(assembly, "usb-guide.txt", guidePath);
             Application.EnableVisualStyles();
@@ -77,7 +81,8 @@ namespace TvHomeInstaller
             {
                 var controls = Descendants(form).ToList();
                 Check(controls.OfType<CheckBox>().Single(x => x.Text.StartsWith("После установки")).Checked, "disable default checked");
-                Check(controls.OfType<CheckBox>().Single(x => x.Text.StartsWith("Добавить VPN")).Checked, "VPN default checked");
+                var vpn = controls.OfType<CheckBox>().Single(x => x.Text.StartsWith("Добавить VPN"));
+                Check(vpn.Checked && vpn.Text.Contains("офлайн") == offlineVpn, "VPN selected and delivery mode shown");
                 var connect = controls.OfType<Button>().Single(x => x.Text == "Подключить");
                 var restore = controls.OfType<Button>().Single(x => x.Text == "Переключить старый");
                 var watch = Stopwatch.StartNew();
@@ -186,6 +191,35 @@ namespace TvHomeInstaller
                 Check(resource != null && hash.ComputeHash(resource).SequenceEqual(hash.ComputeHash(exported)), name + " matches exported file");
         }
 
+        private static void VerifyEmbeddedVpn(Assembly assembly, string originalApk)
+        {
+            VerifyResource(assembly, VpnPackage.EmbeddedResource, originalApk);
+            var flags = BindingFlags.NonPublic | BindingFlags.Static;
+            var vpn = assembly.GetType("TvHomeInstaller.VpnPackage");
+            var testFolder = Path.Combine(Path.GetDirectoryName(assembly.Location), "test-vpn-" + Guid.NewGuid().ToString("N"));
+            var cache = Path.Combine(testFolder, "cache");
+            vpn.GetField("CacheDirectory", flags).SetValue(null, cache);
+            Check(!Directory.Exists(cache), "VPN cache starts empty");
+
+            var receiver = new TestTv();
+            var tvType = assembly.GetType("TvHomeInstaller.Tv");
+            var tv = Activator.CreateInstance(tvType, BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { new Func<int, string[], string>(receiver.Run) }, null);
+            var log = new List<string>();
+            tvType.GetMethod("Install", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(tv,
+                new object[] { "Launcher.apk", null, new Action<string>(log.Add), true });
+            Check(receiver.Writes.Count(entry => entry == "install") == 2 && receiver.InstalledVpn != null &&
+                Path.GetDirectoryName(receiver.InstalledVpn) == cache, "installer transfers both APKs on a fresh offline run");
+            VerifyResource(assembly, VpnPackage.EmbeddedResource, receiver.InstalledVpn);
+            Check(log.Any(line => line.Contains("встроенный APK")) && !log.Any(line => line.Contains("Загружаю")),
+                "first installation uses the embedded resource");
+
+            string usb = Directory.CreateDirectory(Path.Combine(testFolder, "usb")).FullName;
+            vpn.GetMethod("CopyToUsb", flags).Invoke(null, new object[] { usb, new Action<string>(Ignore) });
+            VerifyResource(assembly, VpnPackage.EmbeddedResource, Path.Combine(usb, VpnPackage.ApkName));
+            Console.WriteLine("PASS offline VPN extraction, simulated ADB install and USB copy on Windows");
+        }
+
         private static void Ignore(string text) { }
         private static void Check(bool condition, string description)
         {
@@ -210,17 +244,25 @@ namespace TvHomeInstaller
             internal bool Multiple;
             internal bool Oreo;
             internal string Vpn;
+            internal string InstalledVpn;
             internal readonly List<string> Writes = new List<string>();
 
             internal string Run(int seconds, string[] args)
             {
-                if (args[0] == "install") { Installed = true; Writes.Add("install"); return "Performing Streamed Install\nSuccess"; }
+                if (args[0] == "install")
+                {
+                    if (args[1] != "-r") InstalledVpn = args.Last();
+                    Installed = true;
+                    Writes.Add("install");
+                    return "Performing Streamed Install\nSuccess";
+                }
                 var command = string.Join(" ", args.Skip(1));
                 switch (command)
                 {
                     case "getprop ro.product.model": return "Test TV";
                     case "getprop ro.build.version.release": return Oreo ? "8.0.0" : "11";
                     case "getprop ro.build.version.sdk": return Oreo ? "26" : "30";
+                    case "getprop ro.product.cpu.abilist": return "arm64-v8a,armeabi-v7a";
                     case "am get-current-user": return "0";
                     case "pm list features": return "feature:android.software.leanback";
                     case "pm list packages --user 0": return "package:" + Factory + "\npackage:" + Vpn;

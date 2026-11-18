@@ -1,0 +1,70 @@
+name: Verify offline macOS installer
+
+on:
+  push:
+    branches: [qa/offline-happ-bundles]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build with the original VPN APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          export TVHOME_MAC_VPN_APK="$RUNNER_TEMP/Happ.apk"
+          export TVHOME_MAC_OUTPUT="$RUNNER_TEMP/tv-home-offline"
+          curl --fail --silent --show-error --location --retry 3 --max-time 120 \
+            https://github.com/Happ-proxy/happ-android/releases/download/4.10.1/Happ.apk --output "$TVHOME_MAC_VPN_APK"
+          bash macos-installer/script/build_and_run.sh --verify
+      - name: Verify the exported installer with network blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/tv-home-offline"
+          archive=TV-Home-Installer-macOS-Offline.zip
+          (cd "$output" && shasum -a 256 --check "$archive.sha256")
+          ditto -x -k "$output/$archive" "$RUNNER_TEMP/verified-installer"
+          app="$RUNNER_TEMP/verified-installer/TV Home Installer.app"
+          helpers="$app/Contents/Helpers"
+          codesign --verify --deep --strict "$app"
+          lipo "$app/Contents/MacOS/TVHomeInstaller" -verify_arch arm64 x86_64
+          cmp "$RUNNER_TEMP/Happ.apk" "$app/Contents/Resources/Happ.apk"
+          usb="$(mktemp -d)"
+          result="$(/usr/bin/sandbox-exec -p '(version 1) (allow default) (deny network*)' \
+            "$helpers/TVHomeBackend-arm64" "$helpers/adb" copy-vpn "$usb")"
+          printf '%s\n' "$result" | python3 -c 'import json, sys; reply = json.load(sys.stdin); assert reply["ok"] and any("встроенный APK" in line for line in reply["log"]), reply'
+          cmp "$RUNNER_TEMP/Happ.apk" "$usb/Happ.apk"
+          echo "PASS exported universal app signature and first offline extraction of original VPN APK"
+      - name: Encrypt the archive for transfer to the project workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/tv-home-offline/TV-Home-Installer-macOS-Offline.zip"
+          age_package="$RUNNER_TEMP/age.tar.gz"
+          encryption_tool="$RUNNER_TEMP/age-tool"
+          mkdir "$encryption_tool"
+          curl --fail --silent --show-error --location --retry 3 --max-time 90 \
+            https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-darwin-arm64.tar.gz --output "$age_package"
+          echo "e2020b073c44f692685a24d6abc378817eb81ffaaf49fd0531ef8565f767f2f5  $age_package" | shasum -a 256 --check
+          tar -xzf "$age_package" -C "$encryption_tool"
+          "$encryption_tool/age/age" --encrypt --recipients-file .github/offline-bundle-recipient.txt \
+            --output "$RUNNER_TEMP/TV-Home-Installer-macOS-Offline.zip.age" "$archive"
+          cat "$archive.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-offline-encrypted
+          path: ${{ runner.temp }}/TV-Home-Installer-macOS-Offline.zip.age
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 1

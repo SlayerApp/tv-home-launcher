@@ -16,6 +16,8 @@
 
 На Mac с Xcode Command Line Tools, Python 3 и .NET SDK 10 выполните `bash macos-installer/script/build_and_run.sh --build-only` из корня репозитория. ZIP и его контрольная сумма появятся в `macos-installer/dist/`. Вариант `--verify` проверяет запуск окна и встроенные компоненты. Запуск без аргументов собирает и открывает приложение.
 
+Для сборки с клиентом внутри запустите `TVHOME_MAC_VPN_APK=/путь/Happ.apk bash macos-installer/script/build_and_run.sh --build-only` с официальным APK версии 4.10.1. Скрипт проверит SHA-256 и вложит APK в подписанное приложение. Архив `TV-Home-Installer-macOS-Offline.zip` появится в `macos-installer/dist/offline/`.
+
 Сборка использует локальную подпись ad hoc. Для публичного распространения с автоматическим доверием Gatekeeper потребуется Developer ID и нотарификация Apple. [Требования Apple](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)
 
 Если macOS блокирует скачанную сборку, проверьте её SHA-256. Для проверенного файла macOS позволяет подтвердить первый запуск в разделе «Системные настройки → Конфиденциальность и безопасность». [Инструкция Apple](https://support.apple.com/en-ie/102445)

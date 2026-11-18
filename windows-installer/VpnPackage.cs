@@ -12,11 +12,19 @@ namespace TvHomeInstaller
         internal const string PlayPackage = "com.happproxy";
         internal const string DirectPackage = "su.happ.proxyutility";
         internal const string ApkName = "Happ.apk";
+        internal const string EmbeddedResource = "happ.apk";
         private const string ReleaseUrl = "https://github.com/Happ-proxy/happ-android/releases/download/4.10.1/Happ.apk";
         private const string ReleaseHash = "169f39f9d79ab4d6343588c3ed107e9113f1ecaf793e9ecd06a4fe7e6cc6e7b5";
         private const long ReleaseSize = 69563993;
         private static readonly string CacheDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TVHomeInstaller", "vpn");
+
+#if !MACOS_INSTALLER
+        internal static bool HasEmbeddedApk
+        {
+            get { return typeof(VpnPackage).Assembly.GetManifestResourceInfo(EmbeddedResource) != null; }
+        }
+#endif
 
         internal static string Prepare(Action<string> progress)
         {
@@ -24,11 +32,23 @@ namespace TvHomeInstaller
             string apk = Path.Combine(CacheDirectory, "Happ-4.10.1.apk");
             if (MatchesRelease(apk)) return apk;
 
-            progress("Загружаю VPN из официального релиза…");
             string temp = apk + "." + Guid.NewGuid().ToString("N") + ".tmp";
             try
             {
-                Download(temp);
+                using (var embedded = OpenEmbeddedApk())
+                {
+                    if (embedded == null)
+                    {
+                        progress("Загружаю VPN из официального релиза…");
+                        Download(temp);
+                    }
+                    else
+                    {
+                        progress("Подготавливаю встроенный APK для VPN…");
+                        using (var target = new FileStream(temp, FileMode.CreateNew, FileAccess.Write))
+                            embedded.CopyTo(target);
+                    }
+                }
                 if (!MatchesRelease(temp)) throw new IOException("Контрольная сумма APK клиента не совпала.");
                 if (File.Exists(apk)) File.Replace(temp, apk, null);
                 else File.Move(temp, apk);
@@ -51,6 +71,16 @@ namespace TvHomeInstaller
                 File.Move(temp, destination);
             }
             finally { DeleteTemporary(temp); }
+        }
+
+        private static Stream OpenEmbeddedApk()
+        {
+#if MACOS_INSTALLER
+            string path = Path.Combine(AppContext.BaseDirectory, "..", "Resources", ApkName);
+            return File.Exists(path) ? File.OpenRead(path) : null;
+#else
+            return typeof(VpnPackage).Assembly.GetManifestResourceStream(EmbeddedResource);
+#endif
         }
 
         private static void Download(string destination)

@@ -133,7 +133,7 @@ namespace TvHomeInstaller
             disable.Dock = DockStyle.Fill;
             disable.Margin = new Padding(1, 0, 0, 0);
             body.Controls.Add(disable, 0, 5);
-            vpn.Text = "Добавить VPN (первая загрузка из интернета)";
+            vpn.Text = VpnPackage.HasEmbeddedApk ? "Добавить VPN (офлайн)" : "Добавить VPN (первая загрузка из интернета)";
             vpn.Checked = true;
             vpn.Dock = DockStyle.Fill;
             vpn.Margin = new Padding(1, 0, 0, 0);

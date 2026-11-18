@@ -16,3 +16,5 @@ For USB installation, open the APK using the TV's file manager. Afterwards, conn
 ADB lets the computer connect to the TV. ADB 37.0.1 is bundled in the EXE and extracted on first use. Installation works offline over the local network. [Bundled ADB components and licenses](vendor/README.md)
 
 To build from a repository checkout, run `windows-installer/Build.ps1` in PowerShell. The script validates the APK from `downloads/` or `export/`, compiles the installer using the local .NET Framework compiler, and writes the EXE and TXT to `export/`.
+
+To build with the VPN APK inside, pass the official 4.10.1 APK to `Build.ps1 -VpnApk 'C:\path\Happ.apk'`. The script verifies its SHA-256 and writes `TV-Home-Installer-Offline.exe`. A local network is enough for the first installation.

@@ -13,7 +13,15 @@ fi
 
 project="$(cd "$(dirname "$0")/.." && pwd)"
 repo="$(dirname "$project")"
-out="${TVHOME_MAC_OUTPUT:-$project/dist}"
+vpn_apk="${TVHOME_MAC_VPN_APK:-}"
+dist="$project/dist"
+zip_name=TV-Home-Installer-macOS.zip
+if [[ -n "$vpn_apk" ]]; then
+  dist="$dist/offline"
+  zip_name=TV-Home-Installer-macOS-Offline.zip
+  echo "169f39f9d79ab4d6343588c3ed107e9113f1ecaf793e9ecd06a4fe7e6cc6e7b5  $vpn_apk" | shasum -a 256 --check
+fi
+out="${TVHOME_MAC_OUTPUT:-$dist}"
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
 app="$out/TV Home Installer.app"
@@ -44,6 +52,9 @@ if [[ ! -f "$apk" ]]; then
 fi
 echo "bcea977df6e90fa581da3f59a862d6ea03c88bb1e89a0d4d05100fb53c182121  $apk" | shasum -a 256 --check
 cp "$apk" "$contents/Resources/"
+if [[ -n "$vpn_apk" ]]; then
+  install -m 644 "$vpn_apk" "$contents/Resources/Happ.apk"
+fi
 cp "$project/TV-Home-USB-Instruction.txt" "$contents/Resources/"
 cp "$project/Info.plist" "$contents/"
 plutil -lint "$contents/Info.plist"
@@ -116,10 +127,10 @@ if [[ "$mode" == --verify ]]; then
   echo "macOS app launched, started its local ADB server and verified its embedded APK and USB guide."
 fi
 
-zip="$out/TV-Home-Installer-macOS.zip"
-ditto -c -k --keepParent "$app" "$tmp/TV-Home-Installer-macOS.zip"
-mv -f "$tmp/TV-Home-Installer-macOS.zip" "$zip"
-(cd "$out" && shasum -a 256 "$(basename "$zip")" > "$(basename "$zip").sha256")
+zip="$out/$zip_name"
+ditto -c -k --keepParent "$app" "$tmp/$zip_name"
+mv -f "$tmp/$zip_name" "$zip"
+(cd "$out" && shasum -a 256 "$zip_name" > "$zip_name.sha256")
 echo "$zip"
 
 if [[ "$mode" == run ]]; then
