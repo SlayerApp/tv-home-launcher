@@ -99,6 +99,10 @@ def open_apps_settings():
 print(adb("shell", "cmd", "package", "set-home-activity", "--user", "0",
           PACKAGE + "/.MainActivity").stdout, flush=True)
 start_home()
+not_now = next((node for node in nodes() if node.get("resource-id") == "android:id/button2"
+                and node.get("text", "").casefold() in ("not now", "не сейчас")), None)
+if not_now is not None:
+    click(not_now)
 left, top, right, bottom = bounds(visible_tv())
 x, y = str((left + right) // 2), str((top + bottom) // 2)
 adb("shell", "input", "swipe", x, y, x, y, "950")
