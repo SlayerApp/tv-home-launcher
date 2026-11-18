@@ -22,11 +22,21 @@ jobs:
           export PATH="$tools:$sdk/platform-tools:$sdk/emulator:$PATH"
           image='system-images;android-34;android-tv;x86'
           sdkmanager --install emulator platform-tools "$image"
-          echo no | avdmanager create avd --name tile-test --package "$image" --device tv_1080p
+          export ANDROID_USER_HOME="$RUNNER_TEMP/android-user"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          mkdir -p "$ANDROID_AVD_HOME"
+          avdmanager create avd --name tile-test --package "$image" --device tv_1080p --path "$ANDROID_AVD_HOME/tile-test.avd" <<< "no"
+          avdmanager list avd
+          emulator -list-avds | grep -Fx tile-test
           emulator -avd tile-test -port 5554 -no-window -no-audio -gpu swiftshader -no-snapshot -no-boot-anim > "$RUNNER_TEMP/emulator.log" 2>&1 &
           emulator_pid=$!
           trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
           export ANDROID_SERIAL=emulator-5554
+          sleep 3
+          if ! kill -0 "$emulator_pid" 2>/dev/null; then
+            tail -n 40 "$RUNNER_TEMP/emulator.log"
+            exit 1
+          fi
           if ! timeout 150 adb wait-for-device; then
             tail -n 40 "$RUNNER_TEMP/emulator.log"
             exit 1
