@@ -15,7 +15,9 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 
 Both desktop installers and USB installation use the same APK. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
 
-The **Add VPN** option installs the official ARM client when needed or saves it alongside the launcher for USB installation. The first download needs internet access. Open **VPN** on the TV to import your own profile. [Client setup on Android TV](https://www.happ.su/main/faq/android-tv)
+The **Add VPN** option in the downloadable installers gets the official ARM client on first use. It can also save the client alongside the launcher for USB installation. Open **VPN** on the TV to import your own profile. [Client setup on Android TV](https://www.happ.su/main/faq/android-tv)
+
+To install on the TV without internet access from the first run, build the desktop installer with the official 4.10.1 APK embedded. The build verifies the APK before packaging it. [Official APK release](https://github.com/Happ-proxy/happ-android/releases/tag/4.10.1) · [Windows build guide](windows-installer/README.en.md) · [Mac build guide](macos-installer/README.md#сборка)
 
 Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bundled. The launcher does not automatically disable system apps.
 

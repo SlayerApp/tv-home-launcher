@@ -31,6 +31,7 @@ struct InstallerError: LocalizedError {
 enum InstallerFiles {
     static let apk = "TV-Home-Apple-Style.apk"
     static let guide = "TV-Home-USB-Instruction.txt"
+    static let includesVpn = (try? resource("Happ.apk")) != nil
 
     static func resource(_ name: String) throws -> URL {
         guard let url = Bundle.main.resourceURL?.appendingPathComponent(name),
@@ -254,7 +255,8 @@ struct InstallerView: View {
             .disabled(model.busy)
             Toggle("После установки выключить штатный экран", isOn: $model.disableAfterInstall)
                 .disabled(model.busy || model.device == nil)
-            Toggle("Добавить VPN (первая загрузка из интернета)", isOn: $model.includeVpn)
+            Toggle(InstallerFiles.includesVpn ? "Добавить VPN (офлайн)" : "Добавить VPN (первая загрузка из интернета)",
+                   isOn: $model.includeVpn)
                 .disabled(model.busy)
             HStack(spacing: 12) {
                 Button("Установить лаунчер", action: model.install)
