@@ -9,6 +9,7 @@ struct StockLauncher: Decodable {
 struct ConnectedTV: Decodable {
     let model: String
     let android: String
+    let endpoint: String
     let transport: String
     let suggested: String?
     let stock: [StockLauncher]
@@ -67,6 +68,10 @@ enum Backend {
               !(try String(contentsOf: InstallerFiles.resource(InstallerFiles.guide), encoding: .utf8)).isEmpty else {
             throw InstallerError("Проверка встроенных файлов не прошла.")
         }
+        let server = try run(["start-adb"])
+        guard server.ok else {
+            throw InstallerError(server.error ?? "Проверка запуска ADB не прошла.")
+        }
     }
 
     private static func process(_ executable: URL, _ arguments: [String], input: String? = nil) throws -> String {
@@ -106,7 +111,8 @@ final class InstallerModel: ObservableObject {
     var stock: StockLauncher? { device?.stock.first(where: { $0.package == selection }) }
 
     func connect() {
-        perform(["connect", address], pending: "Подключаюсь к устройству…", finished: "Устройство подключено.")
+        let target = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        perform(["connect", target], pending: "Подключаюсь к \(target)…", finished: "Устройство подключено.")
     }
 
     func install() {
@@ -219,6 +225,7 @@ struct InstallerView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     if let device = model.device {
                         Text("\(device.model) · Android \(device.android)").font(.headline)
+                        Text(device.endpoint).foregroundStyle(.secondary).textSelection(.enabled)
                         if !device.stock.isEmpty {
                             Picker("Штатный экран", selection: $model.selection) {
                                 Text("Выберите пакет").tag("")

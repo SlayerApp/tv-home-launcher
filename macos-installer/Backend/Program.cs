@@ -11,11 +11,18 @@ internal static class Program
         var log = new List<string>();
         try
         {
-            if (args.Length < 3)
+            if (args.Length < 2)
                 throw new ArgumentException("Не указан способ подключения.");
 
             var adb = new Adb(args[0]);
             string operation = args[1];
+            if (operation == "start-adb" && args.Length == 2)
+            {
+                adb.StartLocalServer();
+                return Reply(new { ok = true }, 0);
+            }
+            if (args.Length < 3)
+                throw new ArgumentException("Укажите IP устройства.");
             string address = args[2];
             if (operation == "pair" && args.Length == 3)
             {
@@ -49,6 +56,7 @@ internal static class Program
             {
                 model = tv.Model,
                 android = tv.Android,
+                endpoint = Adb.Endpoint(address),
                 transport,
                 suggested = tv.SuggestedStock,
                 stock

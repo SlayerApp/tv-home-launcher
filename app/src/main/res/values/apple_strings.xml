@@ -43,6 +43,7 @@
     <string name="apple_save_name_error">Could not save the name</string>
     <string name="apple_install_happ">Install Happ first</string>
     <string name="apple_tv_source">TV</string>
+    <string name="apple_tv_tile">TV tile</string>
     <string name="apple_weather_loading">Weather\nFinding your city…</string>
     <string name="apple_weather_unavailable">Weather\nNo recent data</string>
     <string name="apple_weather_backup_title">Weather fallback</string>

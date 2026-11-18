@@ -2,7 +2,7 @@
 
 [English](README.en.md) | [Русский](README.md)
 
-Run `TV-Home-Installer.exe` on Windows 10 or 11. It embeds the same 3.6 APK used for USB installation on Android TV and Google TV with Android 8–14. The installer UI and the USB text guide are in Russian. The **Инструкция** button opens the guide, and **APK для флешки** saves the APK and guide to the selected folder. [Downloads](../README.md#download-and-install)
+Run `TV-Home-Installer.exe` on Windows 10 or 11. It embeds the same 3.7 APK used for USB installation on Android TV and Google TV with Android 8–14. The installer UI and the USB text guide are in Russian. The **Инструкция** button opens the guide, and **APK для флешки** saves the APK and guide to the selected folder. [Downloads](../README.md#download-and-install)
 
 1. Put the PC and TV on the same network. Open **About** on the TV and press OK seven times on **Build** or **Android TV OS build**. Go back to **Developer options** and enable network or wireless debugging. Find the TV's IPv4 address in its connected network settings. The default ADB port is 5555. Enter `IP:port` when the TV displays a different connection port. [Android developer options](https://developer.android.com/studio/debug/dev-options)
 2. For wireless debugging by pairing code, use **Сопряжение…**. Enter the address and code from the TV pairing dialog. After pairing, enter the connection address and port from the main wireless debugging screen.

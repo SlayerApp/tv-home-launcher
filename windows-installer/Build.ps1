@@ -10,8 +10,8 @@ $portable = Join-Path $root 'export\TV-Home-Apple-Style.apk'
 if (-not (Test-Path -LiteralPath $portable -PathType Leaf)) {
     $portable = Join-Path $root 'downloads\TV-Home-Apple-Style.apk'
 }
-if ((Get-FileHash -LiteralPath $portable).Hash -ne 'E0438F5CB1FBB4C2E3B866C65C73802D7DB68A3884D3B328A98361B5AED64759') {
-    throw "APK 3.6 checksum mismatch: $portable"
+if ((Get-FileHash -LiteralPath $portable).Hash -ne '3487F7B3F7580D6212D5D7F79CB4DB0386A9E3725A03828867A9ABEBDD7A8CCC') {
+    throw "APK 3.7 checksum mismatch: $portable"
 }
 $adbBundle = Join-Path $PSScriptRoot 'vendor\adb-windows-37.0.1.zip'
 if ((Get-FileHash -LiteralPath $adbBundle).Hash -ne '270E6BC5473F30B0760224FB429936A876E04DC8E2C5E3BC3489020BADA6D7C0') {

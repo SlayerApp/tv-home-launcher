@@ -20,6 +20,7 @@ import java.util.function.IntPredicate;
 /** Home shortcut choices made from the library, separate from theme defaults and tile ordering. */
 final class LibraryApps {
     static final int MAX_ADDED = 128;
+    private static final String TV_TILE_VISIBLE = "tv_tile_visible";
     private static final long RECENT_MS = 7L * 24 * 60 * 60 * 1000;
     private static final int MAX_BYTES = MAX_ADDED * 256;
 
@@ -34,6 +35,16 @@ final class LibraryApps {
     }
 
     static Set<String> loadRemoved(Context context) { return read(store(context, true)); }
+
+    static boolean tvTileVisible(Context context) {
+        return context.getSharedPreferences(Config.SETTINGS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(TV_TILE_VISIBLE, true);
+    }
+
+    static boolean saveTvTileVisibility(Context context, boolean visible) {
+        return context.getSharedPreferences(Config.SETTINGS_NAME, Context.MODE_PRIVATE)
+                .edit().putBoolean(TV_TILE_VISIBLE, visible).commit();
+    }
 
     private static Set<String> read(AtomicFile file) {
         try { return readStrict(file); }

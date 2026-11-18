@@ -315,8 +315,11 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         fresh.add(new Entry(ctx.getString(R.string.apple_home), new ComponentName(ctx, MainActivity.class),
                 AppleUi.homeTile(ctx), ctx.getDrawable(R.drawable.ic_old_home)));
-        fresh.add(new Entry(Entry.TV_SOURCE, ctx.getString(R.string.apple_tv_source), new ComponentName(ctx, "com.gathin.tvhome.TVSourceTile"),
-                AppleUi.tvTile(ctx), ctx.getDrawable(R.drawable.ic_tv_source), null, 0));
+        if (LibraryApps.tvTileVisible(ctx)) {
+            fresh.add(new Entry(Entry.TV_SOURCE, ctx.getString(R.string.apple_tv_source),
+                    new ComponentName(ctx, "com.gathin.tvhome.TVSourceTile"),
+                    AppleUi.tvTile(ctx), ctx.getDrawable(R.drawable.ic_tv_source), null, 0));
+        }
         Collections.sort(fresh, (a, b) -> {
             // The owner's own order first; tiles it does not know (new installs) follow by the rule below.
             int saved = Order.compare(savedRanks, a.component.flattenToShortString(), b.component.flattenToShortString());
@@ -741,6 +744,10 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     String packageAt(int position) {
         return position >= 0 && position < items.size() ? items.get(position).pkg : null;
+    }
+
+    boolean isTvSourceAt(int position) {
+        return position >= 0 && position < items.size() && items.get(position).kind == Entry.TV_SOURCE;
     }
 
     /** The tile's artwork, its banner or else its icon, for the cinematic shelf's backdrop (HeroArt). */

@@ -21,7 +21,7 @@ chmod +x gradlew
 
 Output: `app/build/outputs/apk/release/app-release.apk`.
 
-Current portable app: `com.gathin.tvhome`, versionCode 18, versionName `3.6-portable6`, minSdk 26, targetSdk 34. There are no CPU-architecture-specific native libraries.
+The portable build `com.gathin.tvhome` version `3.7-portable7` uses versionCode 20, minSdk 26 and targetSdk 34.
 
 ## Signing and updates
 

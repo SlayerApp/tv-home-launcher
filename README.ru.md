@@ -4,13 +4,13 @@
 
 Лёгкий главный экран для Android TV / Google TV с оформлением в стиле Apple TV.
 
-**Переносная сборка 3.6-portable6.** Для Android TV и Google TV с Android 8–14.
+**Переносная сборка 3.7-portable7.** Для Android TV и Google TV с Android 8–14.
 
 ## Скачать и установить
 
-- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
-- В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.0) · [Инструкция для Mac](macos-installer/README.md)
-- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
+- [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7) — установка по локальной сети и переключение штатного главного экрана. ADB и APK уже внутри EXE, поэтому после скачивания установщик работает офлайн.
+- В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.1) · [Инструкция для Mac](macos-installer/README.md)
+- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7).
 - [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 
 Оба установщика и флешка используют один APK. Чтобы изменить действие кнопки Home после установки с флешки, подключите ТВ через установщик для Windows или Mac и воспользуйтесь кнопками управления штатным экраном. Переключение требует сетевой отладки и зависит от прошивки телевизора.
@@ -71,9 +71,10 @@ VPN-кнопка открывает отдельно установленный 
 | --- | --- | --- |
 | Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Основные функции проверены в 3.2; переключение RU/EN и сохранение выбора и фоны — в 3.4; перемещение ТВ/домика — в 3.5 |
 | KIVI 4K Android TV (bangbae) | Android 11 / API 30 | Переносной APK 3.5: установка, Home после перезагрузки, RU/EN, фоны, перемещение ТВ/домика, Bluetooth и источники |
+| Проектор XGIMI Elfin | Android TV | Работу лаунчера подтвердил владелец |
 | Другие Android TV / Google TV | Заявленный минимум Android 8 / API 26 | Реальная установка и работа пока не проверены |
 
-**Различие сборок:** на Xiaomi использована основная сборка, включая проверку перемещения ТВ/домика в 3.5. На KIVI установлен и проверен переносной APK 3.6-portable6 из этого репозитория. Проверка этих двух устройств не означает совместимость со всеми моделями Android TV.
+На Xiaomi использовалась основная сборка. Два телевизора KIVI проверены с переносным APK 3.6-portable6.
 
 Список реальных проверок и ограничений: [TESTED_TVS.md](docs/TESTED_TVS.md).
 
@@ -111,7 +112,7 @@ VPN-кнопка открывает отдельно установленный 
 
 Удерживайте OK на плитке или нажмите Menu, выберите «Переместить», передвигайте выбранную плитку стрелками и нажмите OK для сохранения. Пустые места дока остаются пустыми. «Добавить в док» переносит только выбранную плитку; «Убрать из дока» возвращает её в нижний ряд приложений.
 
-У обычных приложений есть «Убрать с главного экрана»: это снимает ту же отметку в «Настройки → Показывать приложения», не удаляя приложение. Вернуть его можно там же. ТВ и домик нельзя скрыть или удалить, но их можно независимо перемещать и убирать из дока.
+Чтобы скрыть приложение или плитку «ТВ», удерживайте OK и выберите «Убрать с главного экрана». Вернуть плитку можно в «Настройки → Показывать приложения». «ТВ» и «Домик» можно независимо перемещать и убирать из дока.
 
 ![Независимые позиции дока с пустым местом](docs/screenshots/kivi-dock-3.6.png)
 

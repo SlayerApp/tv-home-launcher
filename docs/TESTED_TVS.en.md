@@ -75,9 +75,13 @@ The additional KIVI was used for these actual regression checks:
 
 Held-volume behaviour on the additional KIVI was not separately confirmed. The previous Anoki ACR limitation and untested video/VPN/AirPlay cases below still apply.
 
+## XGIMI Elfin projector
+
+On November 18, 2026, the owner confirmed that the launcher works on their XGIMI Elfin running Android TV. The manufacturer documents USB installation for this model. [XGIMI Elfin support](https://global.xgimi.com/pages/elfin-support)
+
 ## Not yet tested
 
-- Android TV / Google TV models other than the Xiaomi and KIVI listed above.
+- Other Android TV and Google TV models.
 - All native settings routes on Android 8–13 and different firmware.
 - HDMI video, all TV channels and playback in different third-party players.
 - Practical VPN and iPhone AirPlay operation as part of this release.

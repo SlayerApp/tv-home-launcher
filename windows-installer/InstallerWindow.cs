@@ -89,7 +89,7 @@ namespace TvHomeInstaller
             heading.Controls.Add(emblem, 0, 0);
             heading.SetRowSpan(emblem, 2);
             heading.Controls.Add(MakeLabel("TV Home Installer", 22, true), 1, 0);
-            heading.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.6", 10, false), 1, 1);
+            heading.Controls.Add(MakeLabel("Главный экран Android TV · лаунчер 3.7", 10, false), 1, 1);
             body.Controls.Add(heading, 0, 0);
             body.SetRowSpan(heading, 2);
             var connectionHeading = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Margin = new Padding(0) };

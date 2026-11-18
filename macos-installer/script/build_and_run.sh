@@ -42,7 +42,7 @@ apk="$repo/downloads/TV-Home-Apple-Style.apk"
 if [[ ! -f "$apk" ]]; then
   apk="$repo/export/TV-Home-Apple-Style.apk"
 fi
-echo "e0438f5cb1fbb4c2e3b866c65c73802d7db68a3884d3b328a98361b5aed64759  $apk" | shasum -a 256 --check
+echo "3487f7b3f7580d6212d5d7f79cb4db0386a9e3725a03828867a9abebdd7a8ccc  $apk" | shasum -a 256 --check
 cp "$apk" "$contents/Resources/"
 cp "$project/TV-Home-USB-Instruction.txt" "$contents/Resources/"
 cp "$project/Info.plist" "$contents/"
@@ -113,7 +113,7 @@ if [[ "$mode" == --verify ]]; then
     [[ ! -f "$tmp/verified" ]] || cat "$tmp/verified" >&2
     exit 1
   fi
-  echo "macOS app launched and verified its embedded ADB, APK and USB guide."
+  echo "macOS app launched, started its local ADB server and verified its embedded APK and USB guide."
 fi
 
 zip="$out/TV-Home-Installer-macOS.zip"

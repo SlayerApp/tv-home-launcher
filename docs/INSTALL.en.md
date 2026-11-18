@@ -26,6 +26,8 @@ kino.watch, YouTube, Kinopoisk, START, Apple TV, Happ and any AirPlay receiver m
 
 The TV tile opens the built-in tuner. If no tuner is available, the launcher tries the available TV or input selection route. Home returns to the launcher configured as the default Home app.
 
+Hold OK on the TV tile and choose **Remove from Home** to hide it. To bring it back, open **Settings → Show apps** and enable **TV tile**.
+
 “HDMI names” lets you label any physical HDMI port or remove its label. Default labels use HDMI numbers, without a preassigned Apple TV name. These names are saved in the launcher and do not overwrite the TV’s system labels.
 
 ## Weather

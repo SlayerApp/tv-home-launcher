@@ -43,6 +43,7 @@
     <string name="apple_save_name_error">Не удалось сохранить название</string>
     <string name="apple_install_happ">Сначала установите Happ</string>
     <string name="apple_tv_source">ТВ</string>
+    <string name="apple_tv_tile">Плитка «ТВ»</string>
     <string name="apple_weather_loading">Погода\nОпределяем город…</string>
     <string name="apple_weather_unavailable">Погода\nНет свежих данных</string>
     <string name="apple_weather_backup_title">Резервная погода</string>

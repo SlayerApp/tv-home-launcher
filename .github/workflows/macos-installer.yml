@@ -34,9 +34,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create macos-installer-v1.0.0 \
+          gh release create macos-installer-v1.0.1 \
             --target "$GITHUB_SHA" --prerelease \
-            --title "TV Home Installer for macOS 1.0.0" \
-            --notes "Universal app for macOS 15 or later. Includes ADB 37.0.1, launcher APK and USB guide. Ad hoc signed. A Mac build and startup check passed. Network installation on a physical TV or projector still needs verification." \
+            --title "TV Home Installer for macOS 1.0.1" \
+            --notes "Fixes the local ADB server startup and shows the actual TV address after connection. Includes ADB 37.0.1, the 3.7 launcher APK with a hideable TV tile and a USB guide. Universal app for macOS 15 or later. Ad hoc signed." \
             macos-installer/dist/TV-Home-Installer-macOS.zip \
             macos-installer/dist/TV-Home-Installer-macOS.zip.sha256

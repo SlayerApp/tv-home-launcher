@@ -4,13 +4,13 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build 3.6-portable6.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
+**Portable build 3.7-portable7.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
-- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=20261108-scale-guide) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
-- The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.0) · [Mac setup guide](macos-installer/README.md)
-- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.6) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=20261108-scale-guide).
+- [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the APK, so it works offline once downloaded.
+- The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.1) · [Mac setup guide](macos-installer/README.md)
+- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7).
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
 Both desktop installers and USB installation use the same APK. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
@@ -75,9 +75,10 @@ Enabled state, theme and time mode are saved. Automatic follows the TV clock; Of
 | --- | --- | --- |
 | Xiaomi Mini LED 55 2025, MiTV-MOEU1 (lalaland) | Android TV 14 / API 34 | Core functions checked in main 3.2; RU/EN switching and persistence and backgrounds checked in 3.4; TV/Home movement checked in 3.5 |
 | KIVI 4K Android TV (bangbae) | Android 11 / API 30 | Portable 3.5: installation, Home after reboot, RU/EN, backgrounds, TV/Home movement, Bluetooth and inputs |
+| XGIMI Elfin projector | Android TV | Launcher operation confirmed by the owner |
 | Other Android TV / Google TV models | Declared minimum: Android 8 / API 26 | Installation and operation have not been tested on real devices yet |
 
-**Build distinction:** Xiaomi uses the main build, including TV/Home movement checks in 3.5. KIVI was installed and tested with this repository’s portable 3.6-portable6 APK. Testing these two devices does not establish compatibility with every Android TV model.
+Xiaomi used the main build. The two KIVI TVs were tested with the portable 3.6-portable6 APK.
 
 See [TESTED_TVS.en.md](docs/TESTED_TVS.en.md) for actual checks and limitations.
 
@@ -117,7 +118,7 @@ The portable build on a KIVI 4K Android TV running Android 11. These UI captures
 
 Hold OK on a tile or press Menu, choose Move, move this tile with the arrows, and press OK to save. Vacant dock positions stay vacant. Add to dock carries only the selected tile into the dock; Remove from dock returns it to the app grid.
 
-Ordinary apps also offer Remove from Home, which unchecks the same choice in Settings → Show applications without uninstalling the app. Check it again there to restore it. TV and Home cannot be hidden or deleted, but each can be moved or removed from the dock independently.
+To hide an app or the TV tile, hold OK and choose **Remove from Home**. Restore the tile in **Settings → Show apps**. The TV tile and Home tile can each be moved or removed from the dock.
 
 ![Independent dock positions, including an empty place](docs/screenshots/kivi-dock-3.6.png)
 

@@ -3654,7 +3654,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     /**
      * Hold OK on a tile: a glass menu next to it. Move starts reorder mode with this tile already picked up;
-     * Remove from Home takes the shortcut off (only with the app library on, where one press adds it back);
+     * Remove from Home hides the shortcut until it is enabled again in Apps.
      * App info opens the TV's page for the app, which is what holding OK used to do.
      */
     @Override
@@ -3662,11 +3662,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (reordering) return;
         String key = adapter.keyAt(position);
         String pkg = adapter.packageAt(position);
-        boolean utility = new ComponentName(this, MainActivity.class).flattenToShortString().equals(key)
-                || new ComponentName(this, "com.gathin.tvhome.TVSourceTile").flattenToShortString().equals(key)
+        boolean tvTile = adapter.isTvSourceAt(position);
+        boolean homeTile = new ComponentName(this, MainActivity.class).flattenToShortString().equals(key)
                 || "com.codex.tvoldmenu".equals(pkg);
-        // Home and TV may move like apps; empty slots and the Default-home settings tile have no menu.
-        if (key == null || pkg == null || (pkg.equals(getPackageName()) && !utility)) return;
+        // Empty slots and the Default-home settings tile have no menu.
+        if (key == null || pkg == null || (pkg.equals(getPackageName()) && !tvTile && !homeTile)) return;
         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
         LinearLayout rows = panel.findViewById(R.id.rows);
         PopupWindow popup = glassPopup(panel, (int) (200 * density));
@@ -3677,12 +3677,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 () -> startTileMove(key, false));
         if (dockRow && fillDockLeavesSlots && position < COLUMNS)
             addSettingsMenuRow(rows, popup, R.string.tile_remove_from_dock, () -> removeFromDock(key));
-        if (!utility) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
-            if (LibraryApps.save(this, pkg, false)) reloadApps(false);
+        if (!homeTile) addSettingsMenuRow(rows, popup, R.string.library_remove_shortcut, () -> {
+            boolean saved = tvTile ? LibraryApps.saveTvTileVisibility(this, false) : LibraryApps.save(this, pkg, false);
+            if (saved) reloadApps(false);
             else Toast.makeText(this, R.string.library_save_failed, Toast.LENGTH_LONG).show();
         });
         // Some firmware has no App info page at all; a row that only toasts "can't open" helps nobody.
-        Intent info = utility ? null : SystemSettings.appInfo(this, pkg);
+        Intent info = tvTile || homeTile ? null : SystemSettings.appInfo(this, pkg);
         if (info != null) addSettingsMenuRow(rows, popup, R.string.library_app_info, () -> open(info));
         panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         popup.setWidth(Math.max((int) (200 * density), panel.getMeasuredWidth()));

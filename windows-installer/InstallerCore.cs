@@ -56,6 +56,9 @@ namespace TvHomeInstaller
                     throw new InvalidOperationException("ТВ не отвечает по " + endpoint + ". Проверьте IP, порт и сетевую отладку.");
                 }
             }
+#if MACOS_INSTALLER
+            StartLocalServer();
+#endif
             Run(15000, "connect", endpoint);
             var device = Device(endpoint);
             if (device.Groups[1].Value == "offline")
@@ -65,9 +68,9 @@ namespace TvHomeInstaller
                 device = Device(endpoint);
             }
             if (device.Groups[1].Value == "unauthorized")
-                throw new InvalidOperationException("Подтвердите запрос отладки на экране ТВ и нажмите «Подключить» ещё раз.");
+                throw new InvalidOperationException("Подтвердите запрос отладки на экране устройства " + endpoint + " и нажмите «Подключить» ещё раз.");
             if (device.Groups[1].Value != "device" || !device.Groups[2].Success)
-                throw new InvalidOperationException("ADB не установил соединение. Проверьте порт отладки и версию Platform-Tools.");
+                throw new InvalidOperationException("ADB не подключился к " + endpoint + ". Проверьте порт отладки и разрешение на экране устройства.");
             // A transport ID pins this operation to the same connection even if the IP is reused.
             string currentTransport = device.Groups[2].Value;
             if (expectedTransport != null && currentTransport != expectedTransport)
@@ -80,10 +83,26 @@ namespace TvHomeInstaller
         {
             if (!address.Contains(":") || !Regex.IsMatch(code, @"^[0-9]{6}$"))
                 throw new InvalidOperationException("Укажите адрес с портом сопряжения и шестизначный код с ТВ.");
-            string result = RunWithInput(20000, code, new[] { "pair", Endpoint(address) });
+            string endpoint = Endpoint(address);
+#if MACOS_INSTALLER
+            StartLocalServer();
+#endif
+            string result = RunWithInput(20000, code, new[] { "pair", endpoint });
             if (!result.Contains("Successfully paired"))
                 throw new InvalidOperationException("Сопряжение не завершено. Проверьте адрес и обновите код на ТВ.");
         }
+
+#if MACOS_INSTALLER
+        internal void StartLocalServer()
+        {
+            try { Run(15000, "start-server"); }
+            catch (Exception error) when (error is InvalidOperationException || error is IOException ||
+                                          error is TimeoutException || error is System.ComponentModel.Win32Exception)
+            {
+                throw new InvalidOperationException("На Mac не запустился локальный ADB. " + error.Message, error);
+            }
+        }
+#endif
 
         private Match Device(string endpoint)
         {
@@ -105,8 +124,10 @@ namespace TvHomeInstaller
                 StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8
             };
 #if MACOS_INSTALLER
+            // ADB recognizes a hostless TCP socket as local and can start the server on demand.
+            start.ArgumentList.Add("-L");
+            start.ArgumentList.Add("tcp:5041");
             foreach (string arg in args) start.ArgumentList.Add(arg);
-            start.Environment["ADB_SERVER_SOCKET"] = "tcp:127.0.0.1:5041";
 #else
             start.Arguments = string.Join(" ", args.Select(Quote));
 #endif
@@ -277,7 +298,7 @@ namespace TvHomeInstaller
         {
             if (stockToDisable != null) RequireStock(stockToDisable);
             RequireActiveProfile();
-            progress("Устанавливаю APK 3.6. Дождитесь завершения передачи…");
+            progress("Устанавливаю APK. Дождитесь завершения передачи…");
             string result = run(180, new[] { "install", "-r", "--user", user, file });
             if (!Lines(result).Contains("Success")) throw new InvalidOperationException("Установка APK не завершена. " + result);
             progress("APK установлен. Проверяю запуск нового экрана…");
