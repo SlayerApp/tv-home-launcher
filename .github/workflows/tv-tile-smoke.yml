@@ -1,0 +1,38 @@
+name: Check Android TV tile visibility
+
+on:
+  push:
+    branches: [qa/tv-tile-3.7]
+
+permissions:
+  contents: read
+
+jobs:
+  launcher:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+      - name: Boot Android TV and exercise the UI
+        run: |
+          set -euo pipefail
+          sudo setfacl -m "u:$(id -un):rw" /dev/kvm
+          image='system-images;android-30;android-tv;x86'
+          sdkmanager --install "$image"
+          echo no | avdmanager create avd --name tile-test --package "$image" --device tv_1080p
+          emulator -avd tile-test -port 5554 -no-window -no-audio -gpu swiftshader -no-snapshot -no-boot-anim > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
+          export ANDROID_SERIAL=emulator-5554
+          if ! timeout 150 adb wait-for-device; then
+            tail -n 40 "$RUNNER_TEMP/emulator.log"
+            exit 1
+          fi
+          for ((i=0; i<90; i++)); do
+            [[ "$(adb shell getprop sys.boot_completed | tr -d '\r')" != 1 ]] || break
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb shell input keyevent KEYCODE_WAKEUP
+          adb install downloads/TV-Home-Apple-Style.apk
+          python3 .github/tv-tile-smoke.py
