@@ -16,7 +16,8 @@ def key(name, long_press=False):
 
 
 def start_home():
-    adb("shell", "am", "start", "-W", "-n", PACKAGE + "/.MainActivity")
+    print(adb("shell", "am", "start", "-W", "-a", "android.intent.action.MAIN",
+              "-c", "android.intent.category.HOME", "-n", PACKAGE + "/.MainActivity").stdout, flush=True)
 
 
 def nodes():
@@ -40,36 +41,44 @@ def tv_card(node):
 
 
 def click(node):
-    left, top, right, bottom = (int(v) for v in re.findall(r"\d+", node.get("bounds")))
+    left, top, right, bottom = bounds(node)
     adb("shell", "input", "tap", str((left + right) // 2), str((top + bottom) // 2))
+
+
+def bounds(node):
+    return tuple(map(int, re.findall(r"-?\d+", node.get("bounds"))))
+
+
+def describe(current):
+    return [(node.get("package"), node.get("resource-id"), node.get("text"),
+             node.get("content-desc"), node.get("focused"), node.get("bounds"))
+            for node in current if node.get("text") or node.get("content-desc") or is_card(node)]
 
 
 def find(predicate, label):
     current = nodes()
     match = next((node for node in current if predicate(node)), None)
     if match is None:
-        print([(node.get("text"), node.get("content-desc")) for node in current if node.get("text") or node.get("content-desc")])
+        print(describe(current), flush=True)
         raise AssertionError("Could not find " + label)
     return match
 
 
-def focus_tv():
-    for _ in range(12):
+def visible_tv():
+    for step in range(6):
         current = nodes()
         tv = next((node for node in current if tv_card(node)), None)
-        focused = next((node for node in current if is_card(node) and node.get("focused") == "true"), None)
-        if tv is not None and tv.get("focused") == "true":
-            return
-        if tv is None or focused is None:
-            key("KEYCODE_DPAD_DOWN")
-            continue
-        tx, ty, _, _ = map(int, re.findall(r"\d+", tv.get("bounds")))
-        fx, fy, _, _ = map(int, re.findall(r"\d+", focused.get("bounds")))
-        if abs(ty - fy) > 100:
-            key("KEYCODE_DPAD_DOWN" if ty > fy else "KEYCODE_DPAD_UP")
-        else:
-            key("KEYCODE_DPAD_RIGHT" if tx > fx else "KEYCODE_DPAD_LEFT")
-    raise AssertionError("Could not focus the TV tile")
+        if tv is not None:
+            return tv
+        grid = next((node for node in current if node.get("resource-id") == PACKAGE + ":id/grid"), None)
+        if step in (0, 5) or grid is None:
+            print(describe(current), flush=True)
+        if grid is None:
+            raise AssertionError("The launcher grid is not visible")
+        left, top, right, bottom = bounds(grid)
+        x = str((left + right) // 2)
+        adb("shell", "input", "swipe", x, str(bottom - 22), x, str((top + bottom) // 2), "350")
+    raise AssertionError("Could not see the TV tile in the grid")
 
 
 def open_apps_settings():
@@ -87,15 +96,13 @@ def open_apps_settings():
         click(row)
 
 
+print(adb("shell", "cmd", "package", "set-home-activity", "--user", "0",
+          PACKAGE + "/.MainActivity").stdout, flush=True)
 start_home()
-focus_tv()
-key("KEYCODE_MENU")
-try:
-    remove = find(lambda node: node.get("text") in ("Remove from Home", "Убрать с главного экрана"), "Remove from Home")
-except AssertionError:
-    focus_tv()
-    key("KEYCODE_DPAD_CENTER", long_press=True)
-    remove = find(lambda node: node.get("text") in ("Remove from Home", "Убрать с главного экрана"), "Remove from Home")
+left, top, right, bottom = bounds(visible_tv())
+x, y = str((left + right) // 2), str((top + bottom) // 2)
+adb("shell", "input", "swipe", x, y, x, y, "950")
+remove = find(lambda node: node.get("text") in ("Remove from Home", "Убрать с главного экрана"), "Remove from Home")
 click(remove)
 assert not any(tv_card(node) for node in nodes()), "TV tile still visible after hiding"
 adb("shell", "am", "force-stop", PACKAGE)
@@ -110,5 +117,5 @@ restored = find(lambda node: node.get("class") == "android.widget.CheckBox" and
                 node.get("content-desc", "").startswith(("TV tile,", "Плитка «ТВ»,")), "TV tile setting")
 assert restored.get("checked") == "true", "TV tile setting did not turn on"
 start_home()
-focus_tv()
+visible_tv()
 print("PASS: TV tile hides from Home, stays hidden after app restart and returns through Show apps.")
