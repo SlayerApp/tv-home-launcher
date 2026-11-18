@@ -20,7 +20,7 @@ jobs:
           sdk="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
           tools="$(dirname "$(find "$sdk/cmdline-tools" -type f -path '*/bin/sdkmanager' | sort -V | tail -n1)")"
           export PATH="$tools:$sdk/platform-tools:$sdk/emulator:$PATH"
-          image='system-images;android-30;android-tv;x86'
+          image='system-images;android-34;android-tv;x86'
           sdkmanager --install emulator platform-tools "$image"
           echo no | avdmanager create avd --name tile-test --package "$image" --device tv_1080p
           emulator -avd tile-test -port 5554 -no-window -no-audio -gpu swiftshader -no-snapshot -no-boot-anim > "$RUNNER_TEMP/emulator.log" 2>&1 &
