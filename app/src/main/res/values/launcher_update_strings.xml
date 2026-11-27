@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="launcher_update_title">Launcher update</string>
+    <string name="launcher_update_current">Installed version %1$s</string>
+    <string name="launcher_update_check">Check for updates</string>
+    <string name="launcher_update_install">Install update</string>
+    <string name="launcher_update_checking">Checking GitHub…</string>
+    <string name="launcher_update_latest">You have the latest version.</string>
+    <string name="launcher_update_available">Version %1$s is available.</string>
+    <string name="launcher_update_android_too_old">The latest update requires a newer version of Android.</string>
+    <string name="launcher_update_allow_source">Allow installs from this launcher in Android settings. Return here and choose Install update again.</string>
+    <string name="launcher_update_downloading">Downloading and verifying the update…</string>
+    <string name="launcher_update_check_failed">Could not check GitHub. Try again.</string>
+    <string name="launcher_update_download_failed">Could not download the update. Check the network and available storage.</string>
+    <string name="launcher_update_validation_failed">The update APK could not be verified.</string>
+    <string name="launcher_update_installer_unavailable">The Android installer could not be opened.</string>
+</resources>

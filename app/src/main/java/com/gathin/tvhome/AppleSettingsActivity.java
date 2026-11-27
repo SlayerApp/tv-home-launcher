@@ -27,6 +27,9 @@ public final class AppleSettingsActivity extends AppleUi {
         backgroundRow = row(getString(R.string.bg_title), getString(Backgrounds.enabled(this) ? R.string.bg_on : R.string.bg_off) + "  ›",
                 () -> open(new Intent(this, AppleBackgroundsActivity.class)));
         row(getString(R.string.apple_language), LauncherLocale.languageName(this) + "  ›", () -> LauncherLocale.showPicker(this));
+        if (LauncherRelease.PACKAGE_NAME.equals(getPackageName())) {
+            row(getString(R.string.launcher_update_title), "›", () -> open(new Intent(this, LauncherUpdateActivity.class)));
+        }
         row(getString(R.string.apple_weather), getString(R.string.apple_automatic) + "  ›", () -> WeatherWidget.settings(this));
         section(getString(R.string.apple_connections));
         row(getString(R.string.apple_network), "Wi-Fi / Ethernet  ›", () -> openAction(Settings.ACTION_WIFI_SETTINGS));

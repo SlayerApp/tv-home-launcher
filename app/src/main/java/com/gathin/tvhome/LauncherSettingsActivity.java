@@ -47,6 +47,9 @@ public final class LauncherSettingsActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.activity_launcher_settings);
+        View updateChoice = findViewById(R.id.launcherUpdateChoice);
+        updateChoice.setVisibility(LauncherRelease.PACKAGE_NAME.equals(getPackageName()) ? View.VISIBLE : View.GONE);
+        updateChoice.setOnClickListener(v -> startActivity(new Intent(this, LauncherUpdateActivity.class)));
         choices = getSharedPreferences(Config.SETTINGS_NAME, MODE_PRIVATE);
         Config config = Config.load(this);
         View reorderChoice = findViewById(R.id.reorderChoice);

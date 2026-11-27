@@ -4,7 +4,7 @@
 
 A lightweight Android TV / Google TV home launcher with an Apple TV-inspired interface.
 
-**Portable build 3.7.1-portable8.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
+**Portable build 3.8.0-portable9.** For Android TV and Google TV running Android 8–14. The launcher interface and documentation are available in English and Russian.
 
 ## Download and install
 
@@ -14,7 +14,7 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 - [Launcher releases, update notes and APK checksums](https://github.com/SlayerApp/tv-home-launcher/releases)
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
-Both desktop installers and USB installation use the same APK. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
+Install the latest APK over your current version once to add **Settings → Launcher update**. The existing desktop installers bundle 3.7.1. To change the Home button after USB installation, connect the TV with either desktop installer and use its stock launcher controls. These controls require network debugging and firmware support for changing Home.
 
 The **Add VPN** option in the downloadable installers gets the official ARM client on first use. It can also save the client alongside the launcher for USB installation. Open **VPN** on the TV to import your own profile. [Client setup on Android TV](https://www.happ.su/main/faq/android-tv)
 
@@ -26,6 +26,7 @@ Streaming apps, accounts, VPN subscriptions and an AirPlay receiver are not bund
 
 - Four large first-row tiles: kino.watch, YouTube, Kinopoisk and START; other installed TV apps appear below.
 - English and Russian: **Settings → Language → Русский / English**. The choice survives app updates; the TV’s native settings keep their system language.
+- Use **Settings → Launcher update → Check for updates** to find the latest stable GitHub release. Choose **Install update** when it appears and confirm in Android. On the first update, Android may ask you to allow installs from TV Home Launcher.
 - Automatic discovery of newly installed TV apps and control over tile visibility.
 - Inputs, VPN and network controls in a shared top capsule, with a separate settings button.
 - A TV tile for the built-in tuner and custom labels for physical HDMI ports.
@@ -99,7 +100,7 @@ AirPlay availability, VPN connectivity and playback in third-party players are s
 
 `app/src` contains the portable build’s source and JVM tests. Building requires JDK 17 and Android SDK 34. Commands and signing details: [BUILD.en.md](docs/BUILD.en.md).
 
-Build validation for the Android release covered 325 passing JVM tests, 0 lint errors and 104 warnings. The [Windows installer source](windows-installer/) includes its build script and verification program.
+Build validation for the Android release covered 329 passing JVM tests and 0 lint errors. The [Windows installer source](windows-installer/) includes its build script and verification program.
 
 ## Upstream and licenses
 

@@ -38,6 +38,16 @@ jobs:
           apk_version="$(sed -n "s/^package: .*versionName='\([^']*\)'.*/\1/p" <<< "$badging")"
           [[ "${apk_version%%-portable*}" == "$version" ]]
 
+          version_code="$(sed -n "s/^package: .*versionCode='\([0-9]*\)'.*/\1/p" <<< "$badging")"
+          min_sdk="$(sed -n "s/^sdkVersion:'\([0-9]*\)'$/\1/p" <<< "$badging")"
+          hash="$(sha256sum "$apk" | cut -d ' ' -f 1)"
+          jq -n --arg packageName com.gathin.tvhome --arg tag "$GITHUB_REF_NAME" \
+            --arg versionName "$apk_version" --argjson versionCode "$version_code" \
+            --argjson minSdk "$min_sdk" --argjson bytes "$(wc -c < "$apk")" \
+            --arg sha256 "$hash" \
+            '{packageName: $packageName, tag: $tag, versionName: $versionName, versionCode: $versionCode, minSdk: $minSdk, bytes: $bytes, sha256: $sha256}' \
+            > "$RUNNER_TEMP/launcher-update.json"
+
       - name: Publish the versioned release
         shell: bash
         env:
@@ -47,4 +57,4 @@ jobs:
           version="${GITHUB_REF_NAME#launcher-v}"
           gh release create "$GITHUB_REF_NAME" --verify-tag --latest \
             --title "TV Home Launcher $version" --notes-file "docs/releases/$version.md" \
-            downloads/TV-Home-Apple-Style.apk downloads/SHA256.txt
+            downloads/TV-Home-Apple-Style.apk downloads/SHA256.txt "$RUNNER_TEMP/launcher-update.json"

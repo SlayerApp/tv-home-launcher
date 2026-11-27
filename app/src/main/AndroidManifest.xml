@@ -9,6 +9,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- Needed since Android 10 to read the Wi-Fi network name for the network pill. Never requested at
@@ -28,6 +29,18 @@
          apps that declare a module card (docs/specs/card.md). -->
     <queries>
         <provider android:authorities="com.android.tv.settings.accessories.sliceprovider" />
+        <intent>
+            <action android:name="android.intent.action.INSTALL_PACKAGE" />
+            <data android:scheme="content" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/vnd.android.package-archive" />
+        </intent>
+        <intent>
+            <action android:name="android.settings.MANAGE_UNKNOWN_APP_SOURCES" />
+            <data android:scheme="package" />
+        </intent>
         <!-- The standard settings handlers, so package visibility doesn't hide them and send the pills to a vendor fallback by mistake. -->
         <intent>
             <action android:name="android.settings.SETTINGS" />
@@ -109,6 +122,15 @@
             android:screenOrientation="landscape" />
         <activity android:name=".AppleSettingsActivity" android:exported="false"
             android:screenOrientation="landscape" />
+        <activity android:name=".LauncherUpdateActivity" android:exported="false"
+            android:screenOrientation="landscape" />
+        <provider android:name=".LauncherUpdateActivity$ApkProvider"
+            android:authorities="${applicationId}.updates"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/launcher_update_paths" />
+        </provider>
         <activity android:name=".AppleAppsActivity" android:exported="false"
             android:screenOrientation="landscape" />
         <activity android:name=".AppleInputsActivity" android:exported="false"

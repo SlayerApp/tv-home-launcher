@@ -50,7 +50,7 @@ apk="$repo/downloads/TV-Home-Apple-Style.apk"
 if [[ ! -f "$apk" ]]; then
   apk="$repo/export/TV-Home-Apple-Style.apk"
 fi
-echo "bcea977df6e90fa581da3f59a862d6ea03c88bb1e89a0d4d05100fb53c182121  $apk" | shasum -a 256 --check
+echo "5fb7f30981ebb9304b2a9b30d13e2e813566118cc7713d131ee43837ddd30467  $apk" | shasum -a 256 --check
 cp "$apk" "$contents/Resources/"
 if [[ -n "$vpn_apk" ]]; then
   install -m 644 "$vpn_apk" "$contents/Resources/Happ.apk"
