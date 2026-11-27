@@ -35,6 +35,8 @@ Increase the Android version code for each new APK and set its version name. Run
 
 Push the tag `launcher-vX.Y.Z` for that commit, replacing `X.Y.Z` with the APK's version before its optional `-portable` suffix. The workflow checks the APK hash, package name, version and signing certificate before attaching the APK and checksum to the release. [Launcher releases](https://github.com/SlayerApp/tv-home-launcher/releases)
 
+When updating the Windows and macOS installers, refresh the expected APK hash in `windows-installer/Build.ps1` and `macos-installer/script/build_and_run.sh`, then rebuild those installers with the same signed APK.
+
 ## Device validation
 
 When changing native settings routes, test them on an actual TV and update `TESTED_TVS.en.md` and its Russian counterpart. Successful compilation for API 26+ does not prove that Home, Bluetooth or restart navigation works on every firmware.

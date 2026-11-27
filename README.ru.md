@@ -10,7 +10,7 @@
 
 - [Скачать установщик для Windows (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7.1) — установка по локальной сети и переключение штатного главного экрана. ADB и APK лаунчера входят в EXE.
 - В установщик для Mac входят ADB, APK и инструкция для флешки. Поддерживаются macOS 15 и новее, Apple Silicon и Intel. [Скачать для macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.2) · [Инструкция для Mac](macos-installer/README.md)
-- [Скачать APK для флешки](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7.1) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
+- [Скачать свежий APK лаунчера для флешки](https://github.com/SlayerApp/tv-home-launcher/releases/latest/download/TV-Home-Apple-Style.apk) и [инструкцию TXT](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
 - [Версии лаунчера, список изменений и контрольные суммы APK](https://github.com/SlayerApp/tv-home-launcher/releases)
 - [Подключение и установка с Windows](windows-installer/README.md) · [Установка с флешки](docs/INSTALL.ru.txt) · [SHA-256 для EXE и TXT](downloads/Windows-SHA256.txt) · [SHA-256 для APK](downloads/SHA256.txt)
 

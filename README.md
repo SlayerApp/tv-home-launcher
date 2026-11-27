@@ -10,7 +10,7 @@ A lightweight Android TV / Google TV home launcher with an Apple TV-inspired int
 
 - [Download the Windows installer (.exe)](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Installer.exe?v=3.7.1) — installs over your local network and can switch the stock launcher off and back on. The EXE includes ADB and the launcher APK.
 - The Mac installer includes ADB, the APK and the USB guide. It requires macOS 15 or later and supports Apple Silicon and Intel. [Download for macOS](https://github.com/SlayerApp/tv-home-launcher/releases/tag/macos-installer-v1.0.2) · [Mac setup guide](macos-installer/README.md)
-- [Download the APK for a USB drive](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-Apple-Style.apk?v=3.7.1) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
+- [Download the latest launcher APK for a USB drive](https://github.com/SlayerApp/tv-home-launcher/releases/latest/download/TV-Home-Apple-Style.apk) and [the Russian TXT guide](https://raw.githubusercontent.com/SlayerApp/tv-home-launcher/main/downloads/TV-Home-USB-Instruction.txt?v=3.7.1).
 - [Launcher releases, update notes and APK checksums](https://github.com/SlayerApp/tv-home-launcher/releases)
 - [Windows setup in English](windows-installer/README.en.md) · [USB installation in English](docs/INSTALL.en.md) · [Windows and TXT checksums](downloads/Windows-SHA256.txt) · [APK checksum](downloads/SHA256.txt)
 
