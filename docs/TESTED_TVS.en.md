@@ -90,6 +90,12 @@ The additional KIVI was used for these actual regression checks:
 
 Held-volume behaviour on the additional KIVI was not separately confirmed. The previous Anoki ACR limitation and untested video/VPN/AirPlay cases below still apply.
 
+## Launcher update 3.8.0 — checked on November 27, 2026
+
+The Xiaomi MiTV-MOEU1 running Android TV 14 received 3.8.0 over 3.7.1. From **Settings → Launcher update → Check for updates**, the TV read the live GitHub release and showed **You have the latest version**. The native installer and the Android settings page for allowing this install source were both available on that firmware.
+
+An Android TV 14 emulator used a local update feed and two APKs with the same test signature. The launcher offered the newer APK and verified it. Android installed it after confirmation and kept the application data. [Android TV emulator test](https://github.com/SlayerApp/tv-home-launcher/actions/runs/46067725437)
+
 ## XGIMI Elfin projector
 
 On November 18, 2026, the owner confirmed that the launcher works on their XGIMI Elfin running Android TV. The manufacturer documents USB installation for this model. [XGIMI Elfin support](https://global.xgimi.com/pages/elfin-support)
@@ -105,4 +111,4 @@ There are no confirmed tests on Samsung Tizen or LG webOS; the Android APK is no
 
 ## Automated checks
 
-Portable build: 325 JVM tests, 0 lint errors (104 warnings), successful APK assembly. Signature, ZIP integrity, embedded theme and license files were checked. These checks do not replace installation on a specific model.
+Portable build 3.8.0 passed 329 JVM tests and assembled with no lint errors. The APK downloaded from GitHub matched the signed build and the SHA-256 in the release metadata.
