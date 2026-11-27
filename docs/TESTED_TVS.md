@@ -2,7 +2,7 @@
 
 [Русский](TESTED_TVS.md) | [English](TESTED_TVS.en.md)
 
-Дата фиксации: 30 октября 2026 года.
+Обновлено 27 ноября 2026 года.
 
 ## Xiaomi Mini LED 55 2025
 
@@ -32,6 +32,21 @@
 | Заставка и сон | Системные параметры сохранены; тайм-аут экрана 300000 мс, sleep_timeout=-1 |
 
 На этой прошивке стандартный Bluetooth action не обрабатывался; использован штатный раздел аксессуаров через SliceActivity. У меню «Система» потребовался отдельный ограниченный помощник. На другой прошивке поведение может отличаться.
+
+### PatchWall после ожидания
+
+На MiTV-MOEU1 с Android 14 и прошивкой `V816.0.25.12.1.UOEMBTV` система запускала PatchWall 4.21.151.1 при пробуждении, даже когда кнопка Home открывала TV Home Launcher. Если такое повторяется на этой модели, подключитесь к телевизору через ADB. Убедитесь, что `adb shell getprop ro.product.model` возвращает `MiTV-MOEU1`, а главным экраном Android назначен `com.gathin.tvhome/.MainActivity`.
+
+Сохраните исходное состояние пользователя 0 из `adb shell dumpsys package com.mitv.tvhome.atv`. Затем примените обе настройки для PatchWall.
+
+```sh
+adb shell pm disable-user --user 0 com.mitv.tvhome.atv
+adb shell pm suspend --user 0 com.mitv.tvhome.atv
+```
+
+27 ноября проверили, что приостановка сохранилась при переводе пакета обратно в состояние включения по умолчанию. После восстановления обеих настроек пробуждение пультом открыло наш главный экран. Эти команды применяются к настройкам Android на телевизоре. Будущее обновление прошивки может их сбросить.
+
+Если исходное состояние PatchWall было `enabled=0`, `suspended=false`, восстановите его командами `adb shell pm unsuspend --user 0 com.mitv.tvhome.atv` и `adb shell pm default-state --user 0 com.mitv.tvhome.atv`.
 
 ## KIVI 4K Android TV — переносная сборка 3.5
 

@@ -2,7 +2,7 @@
 
 [English](TESTED_TVS.en.md) | [Русский](TESTED_TVS.md)
 
-Recorded on October 30, 2026.
+Updated on November 27, 2026.
 
 ## Xiaomi Mini LED 55 2025
 
@@ -32,6 +32,21 @@ Recorded on October 30, 2026.
 | Screensaver and sleep | System settings preserved; screen timeout 300000 ms, sleep_timeout=-1 |
 
 This firmware did not handle the standard Bluetooth action, so its native accessories SliceActivity was used. System menu navigation required a separate bounded helper. Other firmware may behave differently.
+
+### PatchWall after standby
+
+On the MiTV-MOEU1 with Android 14 and firmware `V816.0.25.12.1.UOEMBTV`, the system started PatchWall on wake even when the Home button opened TV Home Launcher. This happened with PatchWall `4.21.151.1`. Use the steps below on that model if the same symptom occurs. Connect to the TV with ADB and confirm that `adb shell getprop ro.product.model` returns `MiTV-MOEU1` and that Android's default Home is `com.gathin.tvhome/.MainActivity`.
+
+Save the current user 0 state from `adb shell dumpsys package com.mitv.tvhome.atv`. Then apply both settings for PatchWall.
+
+```sh
+adb shell pm disable-user --user 0 com.mitv.tvhome.atv
+adb shell pm suspend --user 0 com.mitv.tvhome.atv
+```
+
+On November 27, we confirmed that the suspension remained after toggling the package back to its default enabled state. After restoring the two settings, the remote's power button brought the TV out of standby to the custom Home. These steps change Android settings on the TV. A future firmware update may reset them.
+
+To restore PatchWall to the tested prior state (`enabled=0`, `suspended=false`), run `adb shell pm unsuspend --user 0 com.mitv.tvhome.atv` and `adb shell pm default-state --user 0 com.mitv.tvhome.atv`.
 
 ## KIVI 4K Android TV — portable 3.5
 

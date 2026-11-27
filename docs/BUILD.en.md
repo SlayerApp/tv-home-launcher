@@ -29,6 +29,12 @@ The current configuration uses a local Android debug signing config. A build mad
 
 Android only allows an installed app to be updated with a compatible signature. An APK rebuilt locally with a different key cannot update the published APK. Future published builds need to preserve the original signing key outside the repository. Do not commit `.keystore`/`.jks` files, passwords or local settings.
 
+## Publish a launcher release
+
+Increase the Android version code for each new APK and set its version name. Run the release checks above and sign the APK with the existing key. Replace `downloads/TV-Home-Apple-Style.apk` and `downloads/SHA256.txt`, while keeping the same asset names. Add English and Russian notes in `docs/releases/X.Y.Z.md` and commit the files to `main`.
+
+Push the tag `launcher-vX.Y.Z` for that commit, replacing `X.Y.Z` with the APK's version before its optional `-portable` suffix. The workflow checks the APK hash, package name, version and signing certificate before attaching the APK and checksum to the release. [Launcher releases](https://github.com/SlayerApp/tv-home-launcher/releases)
+
 ## Device validation
 
 When changing native settings routes, test them on an actual TV and update `TESTED_TVS.en.md` and its Russian counterpart. Successful compilation for API 26+ does not prove that Home, Bluetooth or restart navigation works on every firmware.

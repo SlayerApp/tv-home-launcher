@@ -1,0 +1,50 @@
+name: Publish Android TV launcher
+
+on:
+  push:
+    tags: ['launcher-v*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Verify the release APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_NAME" =~ ^launcher-v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          version="${GITHUB_REF_NAME#launcher-v}"
+          apk=downloads/TV-Home-Apple-Style.apk
+          tools="$ANDROID_HOME/build-tools/34.0.0"
+          test -s "docs/releases/$version.md"
+          (cd downloads && sha256sum --check --strict SHA256.txt)
+
+          signature="$("$tools/apksigner" verify --print-certs "$apk")"
+          signer="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$signature")"
+          [[ "$signer" == 15f3bc05d3454268184a682e7a06dec342b8be423ad769e09dafe665c43a7b8c ]]
+
+          badging="$("$tools/aapt" dump badging "$apk")"
+          [[ "$badging" == "package: name='com.gathin.tvhome' "* ]]
+          apk_version="$(sed -n "s/^package: .*versionName='\([^']*\)'.*/\1/p" <<< "$badging")"
+          [[ "${apk_version%%-portable*}" == "$version" ]]
+
+      - name: Publish the versioned release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#launcher-v}"
+          gh release create "$GITHUB_REF_NAME" --verify-tag --latest \
+            --title "TV Home Launcher $version" --notes-file "docs/releases/$version.md" \
+            downloads/TV-Home-Apple-Style.apk downloads/SHA256.txt
