@@ -77,9 +77,10 @@ def foreground(activity):
                if 'mCurrentFocus=' in line)
 
 
-def app_row(label):
+def app_row(english, russian):
+    prefixes = (english + ', ', russian + ', ')
     return find(lambda n: n.get('package') == PACKAGE and
-                n.get('content-desc', '').startswith(label + ', '), label)
+                n.get('content-desc', '').startswith(prefixes), english)
 
 
 def exercise():
@@ -90,24 +91,26 @@ def exercise():
     inode = re.search(r'User 0: .*?ceDataInode=(\d+)', before)[1]
 
     gear_id = PACKAGE + ':id/btnSettings'
-    gear = find(lambda n: n.get('resource-id') == gear_id or n.get('text') == 'Not now', 'launcher home')
+    gear = find(lambda n: n.get('resource-id') == gear_id or
+                (n.get('resource-id') == 'android:id/button2' and n.get('text', '').casefold() in ('not now', 'не сейчас')),
+                'launcher home')
     if gear.get('resource-id') != gear_id:
         click(gear)
         gear = find(lambda n: n.get('resource-id') == gear_id, 'settings gear')
     click(gear)
     if foreground('MainActivity'):
         key('DPAD_CENTER')
-    row = app_row('Launcher update')
+    row = app_row('Launcher update', 'Обновление лаунчера')
     click(row)
     if foreground('AppleSettingsActivity'):
         key('DPAD_CENTER')
-    check = app_row('Check for updates')
+    check = app_row('Check for updates', 'Проверить обновления')
     click(check)
-    if app_row('Check for updates').get('focused') == 'true':
+    if app_row('Check for updates', 'Проверить обновления').get('focused') == 'true':
         # Right after a check, focus moves to Install. A still focused check
         # button can receive the real remote activation if tap only focused it.
         key('DPAD_CENTER')
-    install = app_row('Install update')
+    install = app_row('Install update', 'Установить обновление')
     assert foreground('LauncherUpdateActivity')
 
     # Exercise the native install confirmation on this disposable emulator.
@@ -117,7 +120,7 @@ def exercise():
     if foreground('LauncherUpdateActivity'):
         key('DPAD_CENTER')
     update = find(lambda n: 'packageinstaller' in n.get('package', '')
-                  and n.get('text', '').casefold() in ('update', 'install')
+                  and n.get('text', '').casefold() in ('update', 'install', 'обновить', 'установить')
                   and n.get('clickable') == 'true', 'Android update confirmation')
     assert 'versionCode=22 ' in adb('shell', 'dumpsys', 'package', PACKAGE)
     click(update)
